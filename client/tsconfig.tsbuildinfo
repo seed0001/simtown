@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/city/interiors.ts","./src/city/registry.ts","./src/scene/buildings.tsx","./src/scene/cityscene.tsx","./src/scene/furniture.tsx","./src/scene/interactionsystem.tsx","./src/scene/interior.tsx","./src/scene/player.tsx","./src/scene/props.tsx","./src/scene/textlabel.tsx"],"version":"5.9.3"}
