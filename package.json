@@ -1,0 +1,9 @@
+{
+  "name": "simtown",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "start": "cd client && npm start"
+  }
+}
