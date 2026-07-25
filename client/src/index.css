@@ -48,6 +48,24 @@ body,
   backdrop-filter: blur(6px);
 }
 
+.clock {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(10, 10, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  user-select: none;
+  backdrop-filter: blur(6px);
+}
+
 .nearby-card {
   position: fixed;
   left: 50%;
@@ -86,6 +104,17 @@ body,
 
 .nearby-card .prompt::before {
   content: '⏎ ';
+}
+
+/* looking at a resident rather than a door */
+.nearby-card.person {
+  background: rgba(18, 14, 30, 0.66);
+  border-color: rgba(190, 170, 255, 0.35);
+}
+
+.nearby-card.person .sub {
+  opacity: 0.85;
+  color: #d9cdff;
 }
 
 .enter-overlay {

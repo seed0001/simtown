@@ -1,6 +1,7 @@
 import { Sky } from '@react-three/drei'
 import { BUILDINGS, STREETS, doorWorld, type BuildingEntry } from '../city/registry'
 import { GasStation, House, OfficeBuilding, Restaurant, Shop } from './Buildings'
+import { StreetPeople } from './People'
 import { RoadNetwork, StreetLight, Tree } from './Props'
 import { AddressPlate, StreetSignPost } from './TextLabel'
 
@@ -100,6 +101,8 @@ export default function CityScene() {
       </mesh>
 
       <RoadNetwork />
+
+      <StreetPeople />
 
       {BUILDINGS.map((b) => {
         const door = doorWorld(b)

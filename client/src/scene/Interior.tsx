@@ -1,12 +1,13 @@
 import type { InteriorDef } from '../city/interiors'
 import { Furniture } from './Furniture'
+import { Occupants } from './People'
 import { SignPlate } from './TextLabel'
 
 const WALL_H = 3.1
 const DOOR_W = 1.8
 
 /** Renders a building interior from its InteriorDef. Door gap is centered on the +z wall. */
-export default function Interior({ def }: { def: InteriorDef }) {
+export default function Interior({ id, def }: { id: string; def: InteriorDef }) {
   const { width: w, depth: d } = def
   const segW = (w - DOOR_W) / 2
   const segX = DOOR_W / 2 + segW / 2
@@ -73,6 +74,8 @@ export default function Interior({ def }: { def: InteriorDef }) {
       {def.items.map((item, i) => (
         <Furniture key={i} item={item} />
       ))}
+
+      <Occupants buildingId={id} def={def} />
     </group>
   )
 }

@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 // Text rendered onto a canvas texture — no font files or network needed.
@@ -75,6 +76,81 @@ export function StreetSignPost({
       <SignPlate text={ewName} position={[0, 3.3, 0]} rotation={0} width={2.6} height={0.55} />
       {/* north-south street name faces east/west */}
       <SignPlate text={nsName} position={[0, 2.65, 0]} rotation={Math.PI / 2} width={2.6} height={0.55} />
+    </group>
+  )
+}
+
+// Rounded pill on a transparent canvas, for labels that float over a person.
+function useNameTexture(text: string) {
+  return useMemo(() => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 512
+    canvas.height = 128
+    const ctx = canvas.getContext('2d')!
+    ctx.clearRect(0, 0, 512, 128)
+
+    const box = () => {
+      ctx.beginPath()
+      if (typeof ctx.roundRect === 'function') ctx.roundRect(8, 28, 496, 72, 36)
+      else ctx.rect(8, 28, 496, 72)
+    }
+    ctx.fillStyle = 'rgba(10, 10, 20, 0.62)'
+    box()
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.24)'
+    ctx.lineWidth = 3
+    box()
+    ctx.stroke()
+
+    ctx.fillStyle = '#ffffff'
+    ctx.font = '600 44px system-ui, Segoe UI, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(text, 256, 65, 440)
+
+    const texture = new THREE.CanvasTexture(canvas)
+    texture.anisotropy = 4
+    return texture
+  }, [text])
+}
+
+const TAG_WORLD_POS = new THREE.Vector3()
+
+/**
+ * A name that floats over a resident, turns to face the camera, and hides
+ * past `maxDistance` so the skyline doesn't fill with labels. Mount it under a
+ * group that carries position but no rotation — it copies the camera's
+ * orientation directly, so a rotated parent would skew it.
+ */
+export function NameTag({
+  text,
+  position,
+  maxDistance = 18,
+  width = 1.5,
+}: {
+  text: string
+  position: [number, number, number]
+  maxDistance?: number
+  width?: number
+}) {
+  const ref = useRef<THREE.Group>(null)
+  const texture = useNameTexture(text)
+
+  useFrame((state) => {
+    const g = ref.current
+    if (!g) return
+    g.getWorldPosition(TAG_WORLD_POS)
+    const visible = state.camera.position.distanceTo(TAG_WORLD_POS) < maxDistance
+    g.visible = visible
+    if (visible) g.quaternion.copy(state.camera.quaternion)
+  })
+
+  return (
+    <group ref={ref} position={position}>
+      <mesh>
+        <planeGeometry args={[width, width / 4]} />
+        <meshBasicMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
+      </mesh>
     </group>
   )
 }

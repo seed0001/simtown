@@ -208,6 +208,11 @@ The existing town (10 houses, 4 shops, diner, gas station, 5 offices,
    client connects, sees the shared town and time.
 2. **Residents in the world**: cast seeded, deterministic schedules
    executing, walking commutes, buildings occupied. (No LLM yet.)
+   *Standing in client-side as a placeholder* — bodies, a town clock,
+   home/work presence and commutes all run in the browser today
+   (`client/src/sim/`). Step 1 replaces that clock and those positions
+   with the server's; the placeholder is written to be deleted, not
+   extended.
 3. **Economy rails**: accounts, wages, purchases, traveler inflow.
 4. **LLM layer**: personas + player chat, then NPC-NPC conversations,
    then the overnight planner, then the Town Director.

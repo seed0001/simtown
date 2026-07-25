@@ -49,12 +49,28 @@ export interface Resident {
   job: Job
   /** opening bank balance, dollars */
   balance: number
+  /** what they look like in-world */
+  appearance: Appearance
   /** who they are — the persona prompt the LLM speaks and plans from */
   persona: string
   /** how they talk — voice notes for dialogue generation */
   voice: string
   /** day of town history they arrived. 0 = founding resident. */
   arrivedDay: number
+}
+
+/** What a resident looks like. Drives the body mesh in scene/Person.tsx. */
+export interface Appearance {
+  skin: string
+  hair: string
+  hairStyle: 'short' | 'long' | 'bun' | 'thin' | 'bald'
+  shirt: string
+  pants: string
+  shoes: string
+  /** overall height multiplier, roughly 0.94–1.06 */
+  height: number
+  /** torso/shoulder width multiplier, roughly 0.92–1.14 */
+  build: number
 }
 
 export type RelationKind = 'spouse' | 'roommate' | 'friend' | 'rival' | 'sibling'
@@ -118,6 +134,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 15,
     },
     balance: 1240,
+    appearance: {
+      skin: '#6b4a35',
+      hair: '#231d1a',
+      hairStyle: 'short',
+      shirt: '#f2efe6', // cook's whites
+      pants: '#3b4048',
+      shoes: '#2a2724',
+      height: 1.03,
+      build: 1.14,
+    },
     persona:
       'Runs the grill at the Bluebird, which he and Nadia bought eleven years ago and have never quite finished paying off. Up at 4:40 without an alarm. Judges a town by whether its diner is honest and people by whether they finish the plate. Generous with food, tight with money, and quietly afraid the place will not last another bad winter.',
     voice: 'Short declarative sentences. Warms up only when the subject is food.',
@@ -138,6 +164,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 17,
     },
     balance: 6800,
+    appearance: {
+      skin: '#6b4a35',
+      hair: '#241c18',
+      hairStyle: 'bun',
+      shirt: '#7d8fa8',
+      pants: '#2f3440',
+      shoes: '#33302c',
+      height: 0.98,
+      build: 0.95,
+    },
     persona:
       'Keeps the books at Meridian by day and the Bluebird’s by night, which makes her the only person in town who knows exactly how thin the diner’s margin is. Precise, unsentimental, relentlessly loyal. She notices when numbers do not add up, and when people do not either.',
     voice: 'Dry and exact. Asks a question instead of making an accusation.',
@@ -158,6 +194,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 17,
     },
     balance: 980,
+    appearance: {
+      skin: '#e0b08a',
+      hair: '#8a6a3a',
+      hairStyle: 'short',
+      shirt: '#4e8a5c', // grocer's green
+      pants: '#7a6a52',
+      shoes: '#4a3f34',
+      height: 1.02,
+      build: 1.06,
+    },
     persona:
       'Works the floor at the Green Grocer and knows every regular’s usual order. Constitutionally incapable of saying no — to a discount, a favor, or a twenty-minute conversation in the produce aisle. Happiest when the store is busy, which he keeps confusing with profitable.',
     voice: 'Warm and fast, over-shares. Trails off checking you are still with him.',
@@ -178,6 +224,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 19,
     },
     balance: 9400,
+    appearance: {
+      skin: '#b3805a',
+      hair: '#1c1512',
+      hairStyle: 'long',
+      shirt: '#2c3550', // blazer
+      pants: '#20263a',
+      shoes: '#26221f',
+      height: 0.99,
+      build: 0.93,
+    },
     persona:
       'Paralegal at a firm in Sandstone Tower, first one in and often the last one out. She married Theo for exactly the openness that now exhausts her: he gives it away, she counts it. Wants out of the tower and into something of her own, and has not said so out loud yet.',
     voice: 'Measured and careful. Says less than she is thinking; what she says is chosen.',
@@ -198,6 +254,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 19,
     },
     balance: 210,
+    appearance: {
+      skin: '#5a3d2b',
+      hair: '#1a1512',
+      hairStyle: 'short',
+      shirt: '#8e2f28', // band tee
+      pants: '#2b3038',
+      shoes: '#d8d2c4',
+      height: 1.01,
+      build: 0.97,
+    },
     persona:
       'Behind the counter at Red Rocket, where he would work for free and very nearly does. Encyclopedic about records, hopeless about rent, permanently three days from broke. Treats every conversation as an opening to recommend something.',
     voice: 'Enthusiastic and tangential. Name-drops bands nobody asked about.',
@@ -218,6 +284,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 6,
     },
     balance: 3150,
+    appearance: {
+      skin: '#c99a72',
+      hair: '#2a211c',
+      hairStyle: 'long',
+      shirt: '#39506b', // station polo
+      pants: '#2a2f38',
+      shoes: '#2e2b28',
+      height: 0.97,
+      build: 1.0,
+    },
     persona:
       'Works the overnight register at Gas & Go, which means she sees the town at its least guarded — who is driving at three in the morning, who is buying what, who is not going home. Sleeps through the afternoon. Says almost nothing and forgets nothing.',
     voice: 'Flat and brief, occasionally devastating. Answers the question asked, not the one implied.',
@@ -238,6 +314,16 @@ export const RESIDENTS: Resident[] = [
       endHour: 18,
     },
     balance: 14500,
+    appearance: {
+      skin: '#e8c4a0',
+      hair: '#c9c4bd', // gone grey
+      hairStyle: 'thin',
+      shirt: '#7a5f86', // cardigan
+      pants: '#4a4250',
+      shoes: '#3b3530',
+      height: 0.95,
+      build: 1.04,
+    },
     persona:
       'Has owned Blue Harbor Books for twenty-six years. Widowed nine, and has arranged her life so that the shop is where people come to her rather than the other way round. The closest thing the town has to a historian: she remembers who lived in your house before you did.',
     voice: 'Unhurried and wry. Fond of the long way round to a point.',
@@ -323,15 +409,50 @@ export function staffOf(buildingId: string): Resident[] {
   return RESIDENTS.filter((r) => r.job.workplaceId === buildingId)
 }
 
+// ---------- shifts ----------
+// Time is measured in minutes-of-week: 0 is Sunday 00:00, 10080 wraps back to
+// it. A shift is one [start, end) window; an overnight shift simply has an end
+// past the day boundary, so nothing special-cases midnight.
+
+export const WEEK_MINUTES = 7 * 24 * 60
+
+export interface ShiftSpan {
+  /** minutes of week */
+  start: number
+  /** minutes of week; may run past WEEK_MINUTES for an overnight shift */
+  end: number
+}
+
+/** Every shift a resident works in a week. */
+export function shiftSpans(r: Resident): ShiftSpan[] {
+  const { days, startHour, endHour } = r.job
+  const lengthHours = endHour > startHour ? endHour - startHour : endHour + 24 - startHour
+  return days.map((d) => {
+    const start = d * 1440 + startHour * 60
+    return { start, end: start + lengthHours * 60 }
+  })
+}
+
+/**
+ * True when minute-of-week `t` falls inside [start, end). Start and end may run
+ * past the end of the week; the comparison wraps, so a Saturday-night shift
+ * spilling into Sunday morning works without a special case.
+ */
+export function inWeekWindow(t: number, start: number, end: number): boolean {
+  const length = end - start
+  if (length <= 0) return false
+  const wrap = (n: number) => ((n % WEEK_MINUTES) + WEEK_MINUTES) % WEEK_MINUTES
+  return wrap(wrap(t) - wrap(start)) < length
+}
+
+/** True while the resident is on the clock at this minute of the week. */
+export function isOnShiftAt(r: Resident, minuteOfWeek: number): boolean {
+  return shiftSpans(r).some((s) => inWeekWindow(minuteOfWeek, s.start, s.end))
+}
+
 /** True while the shift covers this hour, handling overnight shifts. */
 export function isOnShift(r: Resident, day: number, hour: number): boolean {
-  const { days, startHour, endHour } = r.job
-  const overnight = endHour <= startHour
-  if (!overnight) return days.includes(day) && hour >= startHour && hour < endHour
-  // an overnight shift starting on a worked day spills into the next morning
-  if (days.includes(day) && hour >= startHour) return true
-  const prevDay = (day + 6) % 7
-  return days.includes(prevDay) && hour < endHour
+  return isOnShiftAt(r, day * 1440 + hour * 60)
 }
 
 /** Every relationship a resident has, household ties included. */
