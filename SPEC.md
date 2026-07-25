@@ -73,11 +73,20 @@ decided and need sign-off before being built.
 
 ## 5. Residents
 
-- **22 adults at launch across 12 households:**
-  - 8 married couples (16 adults) — the relationship core and the
+- **The town starts small and grows.** Rather than seeding a full city,
+  launch with a **founding cast** and let the population expand as the
+  sim runs: residents move in, households form and split, and couples
+  get places of their own. New arrivals need housing, so the **map
+  grows with the population** (§10).
+- **Founding cast — 7 adults across 4 households** (built, in
+  `client/src/city/residents.ts`):
+  - 2 married couples (4 adults) — the relationship core and the
     source of future children
-  - 2 roommate pairs (4 adults)
-  - 2 solo residents (2 adults)
+  - 1 roommate pair (2 adults)
+  - 1 solo resident (1 adult)
+- **22 adults across 12 households** is the shape the town grows
+  *toward*, not a launch requirement. Six of the ten existing houses
+  start vacant; when they fill, the town has to build.
 - Every adult has: a **persona** (who they are, how they talk), a
   **memory** (persistent, event-sourced, distilled nightly), a **job**
   with a real workplace address, a **home** address, a **bank account**,
@@ -87,8 +96,9 @@ decided and need sign-off before being built.
   paths; both parties remember them, so gossip and relationships
   propagate and influence future plans.
 - The adult cast (names, personas, marriages, who lives where, who
-  works where) is a **separate deliverable to be designed with Travis**
-  — not invented unilaterally.
+  works where) is designed **with Travis** — never invented
+  unilaterally. The founding seven are built and awaiting his review;
+  everyone after them arrives through town history.
 
 ### Kids
 
@@ -120,8 +130,9 @@ decided and need sign-off before being built.
   resumes mid-stream, remembering "their" day — which was actually
   yours. Skip your shift and blow the grocery money, and the overnight
   planner, your spouse, and the town react.
-- **Multiplayer capacity = adult population.** Up to 22 humans at once,
-  each inhabiting a different resident, visible to each other in-world.
+- **Multiplayer capacity = adult population**, so capacity grows as the
+  town does — 7 at founding, 22 at full build-out. Each human inhabits
+  a different resident, visible to the others in-world.
 
 ## 7. Economy
 
