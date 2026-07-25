@@ -3,7 +3,7 @@
 // To edit a building, find it here by address; its interior map lives in
 // interiors.ts under the same id.
 
-export type BuildingKind = 'house' | 'restaurant' | 'gasstation' | 'shop' | 'office'
+export type BuildingKind = 'house' | 'restaurant' | 'gasstation' | 'shop' | 'office' | 'airport'
 
 export interface BuildingEntry {
   id: string
@@ -37,6 +37,8 @@ export const BUILDINGS: BuildingEntry[] = [
   { id: 'main-106', kind: 'house', name: 'Rosewood House', number: 106, street: 'Main Street', position: [-14, 0, -12], rotation: 0, colors: { body: '#e8d8b0', roof: '#8c4a3c' } },
   { id: 'main-112', kind: 'restaurant', name: 'Bluebird Diner', number: 112, street: 'Main Street', position: [16, 0, -12], rotation: 0 },
   { id: 'main-118', kind: 'office', name: 'Eastview Offices', number: 118, street: 'Main Street', position: [48, 0, -14], rotation: 0, colors: { body: '#93a89b' }, size: { height: 17 } },
+  // the airport terminal sits at the east end of Main Street; the airfield itself is scenery (city/airport.ts)
+  { id: 'main-130', kind: 'airport', name: 'Simtown Municipal Airport', number: 130, street: 'Main Street', position: [72, 0, -13], rotation: 0, colors: { body: '#d9dde2', roof: '#5a6b78' }, size: { width: 18, depth: 11, height: 5.4 } },
   // ---------- Main Street, south side ----------
   { id: 'main-99', kind: 'house', name: 'Aspen Cottage', number: 99, street: 'Main Street', position: [-48, 0, 12], rotation: Math.PI, colors: { body: '#ccdce0', roof: '#4a6a72' } },
   { id: 'main-101', kind: 'house', name: 'Hazel House', number: 101, street: 'Main Street', position: [-25, 0, 12], rotation: Math.PI, colors: { body: '#ecd8c8', roof: '#8c5a3c' } },
@@ -78,6 +80,7 @@ function doorLocal(b: BuildingEntry): [number, number] {
     case 'shop':
       return [0, 4.05]
     case 'office':
+    case 'airport':
       return [0, (b.size?.depth ?? 10) / 2]
     case 'gasstation':
       // the convenience shop's door, at the back of the pad

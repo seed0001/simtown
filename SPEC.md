@@ -176,6 +176,14 @@ The existing town (10 houses, 4 shops, diner, gas station, 5 offices,
 - **Police station** (police officer job)
 - **City hall** (city worker job, civic anchor)
 - **Motel** (travelers stay and spend)
+- **Simtown Municipal Airport** — east of Birch Street, at the end of
+  Main Street. A single north-south strip, apron, helipad, hangar,
+  control tower, and an enterable terminal at **130 Main Street**.
+  Light aircraft and helicopters arrive, park, and depart on a fixed
+  daily schedule (~3 movements a day) driven by the town clock, so it
+  costs no tokens. **Scenery for now**: nobody works there and nobody
+  gets off the aircraft. It is the obvious arrival point for the
+  travelers in §5 once they exist.
 - **School — later**, once the first kids born in town need it. Not at
   launch.
 

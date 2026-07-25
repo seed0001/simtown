@@ -163,6 +163,31 @@ function officeLobbyInterior(opts: { accent?: string } = {}): InteriorDef {
   }
 }
 
+function terminalInterior(): InteriorDef {
+  const rows: FurnitureItem[] = []
+  for (const x of [-3.4, 0, 3.4]) {
+    rows.push({ type: 'bench', position: [x, 0.4], color: '#4a5a68' })
+    rows.push({ type: 'bench', position: [x, 2.4], rotation: Math.PI, color: '#4a5a68' })
+  }
+  return {
+    width: 16,
+    depth: 10,
+    floorColor: '#a8adb4',
+    wallColor: '#e6eaee',
+    items: [
+      // check-in counter along the airside wall
+      { type: 'counter', position: [-4.2, -3.5], size: 5, color: '#5a6b78' },
+      { type: 'shelf', position: [5, -3.5], size: 4 },
+      { type: 'stool', position: [-4.2, -2.4], color: '#5a6b78' },
+      ...rows,
+      { type: 'plant', position: [-7, 3.7] },
+      { type: 'plant', position: [7, 3.7] },
+      { type: 'plant', position: [7.1, -3.6] },
+      { type: 'lamp', position: [-7.1, -3.6] },
+    ],
+  }
+}
+
 // ---------- the index: building id -> its dedicated interior map ----------
 
 export const INTERIORS: Record<string, InteriorDef> = {
@@ -182,6 +207,7 @@ export const INTERIORS: Record<string, InteriorDef> = {
   // landmarks
   'main-112': dinerInterior(),
   'main-115': gasShopInterior(),
+  'main-130': terminalInterior(),
   // Maple Avenue shops
   'maple-301': shopInterior({ accent: '#6c5ce7' }),
   'maple-305': shopInterior({ accent: '#00885a', floor: '#a8b598' }),

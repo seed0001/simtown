@@ -50,6 +50,25 @@ export function nowTownTime(): TownTime {
   return townTimeAt(Date.now())
 }
 
+/**
+ * True when minute-of-week `t` falls inside [start, end). Start and end may run
+ * past the end of the week; the comparison wraps, so a Saturday-night window
+ * spilling into Sunday morning works without a special case.
+ */
+export function inWeekWindow(t: number, start: number, end: number): boolean {
+  const length = end - start
+  if (length <= 0) return false
+  const wrap = (n: number) => ((n % WEEK_MINUTES) + WEEK_MINUTES) % WEEK_MINUTES
+  return wrap(wrap(t) - wrap(start)) < length
+}
+
+/** How far through a window starting at `start` and lasting `length` minutes, 0..1. */
+export function windowProgress(t: number, start: number, length: number): number {
+  if (length <= 0) return 0
+  const wrap = (n: number) => ((n % WEEK_MINUTES) + WEEK_MINUTES) % WEEK_MINUTES
+  return Math.max(0, Math.min(1, wrap(wrap(t) - wrap(start)) / length))
+}
+
 /** "Tuesday 07:45" */
 export function formatTownTime(t: TownTime): string {
   const hh = String(t.hour).padStart(2, '0')

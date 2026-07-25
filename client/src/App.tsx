@@ -9,7 +9,8 @@ import { getInterior } from './city/interiors'
 import { RESIDENTS } from './city/residents'
 import { formatTownTime, nowTownTime } from './sim/clock'
 
-const CITY_BOUNDS: Bounds = { minX: -78, maxX: 78, minZ: -78, maxZ: 78 }
+// extends east and north to take in the airfield (city/airport.ts)
+const CITY_BOUNDS: Bounds = { minX: -78, maxX: 138, minZ: -88, maxZ: 78 }
 
 /** Ticks the town clock for the HUD. The scene reads the clock directly. */
 function useTownClockLabel() {

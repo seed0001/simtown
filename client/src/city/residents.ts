@@ -10,6 +10,7 @@
 // building ids from registry.ts; run validateResidents() to catch a typo.
 
 import { BUILDINGS, addressOf, getBuilding, type BuildingEntry } from './registry'
+import { WEEK_MINUTES, inWeekWindow } from '../sim/clock'
 
 export type Gender = 'male' | 'female'
 
@@ -414,7 +415,9 @@ export function staffOf(buildingId: string): Resident[] {
 // it. A shift is one [start, end) window; an overnight shift simply has an end
 // past the day boundary, so nothing special-cases midnight.
 
-export const WEEK_MINUTES = 7 * 24 * 60
+// Week-window arithmetic lives in sim/clock.ts, the town's time primitive, and
+// is re-exported here so callers working with shifts don't need both imports.
+export { WEEK_MINUTES, inWeekWindow }
 
 export interface ShiftSpan {
   /** minutes of week */
@@ -431,18 +434,6 @@ export function shiftSpans(r: Resident): ShiftSpan[] {
     const start = d * 1440 + startHour * 60
     return { start, end: start + lengthHours * 60 }
   })
-}
-
-/**
- * True when minute-of-week `t` falls inside [start, end). Start and end may run
- * past the end of the week; the comparison wraps, so a Saturday-night shift
- * spilling into Sunday morning works without a special case.
- */
-export function inWeekWindow(t: number, start: number, end: number): boolean {
-  const length = end - start
-  if (length <= 0) return false
-  const wrap = (n: number) => ((n % WEEK_MINUTES) + WEEK_MINUTES) % WEEK_MINUTES
-  return wrap(wrap(t) - wrap(start)) < length
 }
 
 /** True while the resident is on the clock at this minute of the week. */

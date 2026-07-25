@@ -18,7 +18,7 @@ import {
   type Resident,
 } from '../city/residents'
 import { routeBetween, sampleRoute, type Point, type Waypoint } from './routes'
-import { WEEK_MINUTES, type TownTime } from './clock'
+import { windowProgress, type TownTime } from './clock'
 
 /** Town minutes a resident spends walking to or from work. */
 export const COMMUTE_MINUTES = 30
@@ -26,12 +26,6 @@ export const COMMUTE_MINUTES = 30
 export type Presence =
   | { kind: 'indoors'; buildingId: string }
   | { kind: 'commuting'; fromId: string; toId: string; toWork: boolean; progress: number }
-
-/** How far through a window starting at `start` and lasting `length` minutes we are, 0..1. */
-function windowProgress(t: number, start: number, length: number): number {
-  const wrap = (n: number) => ((n % WEEK_MINUTES) + WEEK_MINUTES) % WEEK_MINUTES
-  return Math.max(0, Math.min(1, wrap(wrap(t) - wrap(start)) / length))
-}
 
 export function presenceOf(r: Resident, t: TownTime): Presence {
   const home = homeOf(r)

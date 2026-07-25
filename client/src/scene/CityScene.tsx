@@ -1,6 +1,8 @@
 import { Sky } from '@react-three/drei'
 import { BUILDINGS, STREETS, doorWorld, type BuildingEntry } from '../city/registry'
-import { GasStation, House, OfficeBuilding, Restaurant, Shop } from './Buildings'
+import Airport from './Airport'
+import { GasStation, House, OfficeBuilding, Restaurant, Shop, Terminal } from './Buildings'
+import Flights from './Flights'
 import { StreetPeople } from './People'
 import { RoadNetwork, StreetLight, Tree } from './Props'
 import { AddressPlate, StreetSignPost } from './TextLabel'
@@ -61,6 +63,18 @@ function Building({ b }: { b: BuildingEntry }) {
           color={b.colors?.body}
         />
       )
+    case 'airport':
+      return (
+        <Terminal
+          position={b.position}
+          rotation={b.rotation}
+          width={b.size?.width}
+          depth={b.size?.depth}
+          height={b.size?.height}
+          color={b.colors?.body}
+          roofColor={b.colors?.roof}
+        />
+      )
   }
 }
 
@@ -71,6 +85,7 @@ const PLATE_Y: Record<BuildingEntry['kind'], number> = {
   gasstation: 3.1,
   shop: 2.7,
   office: 3.2,
+  airport: 3.4,
 }
 
 export default function CityScene() {
@@ -78,19 +93,22 @@ export default function CityScene() {
     <group>
       {/* environment */}
       <Sky sunPosition={[100, 60, 40]} turbidity={6} />
-      <fog attach="fog" args={['#cfe0ee', 60, 170]} />
+      {/* fog reaches past the airfield now, so the runway is visible from town */}
+      <fog attach="fog" args={['#cfe0ee', 70, 300]} />
       <ambientLight intensity={0.55} />
       <hemisphereLight args={['#bcd8f0', '#8a9a72', 0.35]} />
+      {/* the shadow frustum has to cover the airport too; the bigger map keeps
+          the town's shadows finer than they were before it was widened */}
       <directionalLight
         position={[60, 80, 30]}
         intensity={1.25}
         castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-90}
-        shadow-camera-right={90}
-        shadow-camera-top={90}
-        shadow-camera-bottom={-90}
-        shadow-camera-far={250}
+        shadow-mapSize={[4096, 4096]}
+        shadow-camera-left={-150}
+        shadow-camera-right={150}
+        shadow-camera-top={150}
+        shadow-camera-bottom={-150}
+        shadow-camera-far={420}
         shadow-bias={-0.0004}
       />
 
@@ -101,6 +119,9 @@ export default function CityScene() {
       </mesh>
 
       <RoadNetwork />
+
+      <Airport />
+      <Flights />
 
       <StreetPeople />
 

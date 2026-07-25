@@ -199,6 +199,71 @@ export function Shop({
   )
 }
 
+/**
+ * The airport terminal: a low, wide, glassy shed with a flat roof. Landside
+ * (the +z face) is the entrance onto Main Street; the far side gives onto the
+ * apron, so it reads as a building you pass through.
+ */
+export function Terminal({
+  position,
+  rotation = 0,
+  width = 18,
+  depth = 11,
+  height = 5.4,
+  color = '#d9dde2',
+  roofColor = '#5a6b78',
+}: BuildingProps & {
+  width?: number
+  depth?: number
+  height?: number
+  color?: string
+  roofColor?: string
+}) {
+  const glassCols = Math.floor((width - 5) / 2.4)
+  return (
+    <group position={position} rotation-y={rotation}>
+      <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+      {/* flat roof with an overhanging canopy on the landside */}
+      <mesh position={[0, height + 0.2, 0.6]} castShadow>
+        <boxGeometry args={[width + 1.2, 0.4, depth + 2.4]} />
+        <meshStandardMaterial color={roofColor} />
+      </mesh>
+      {/* canopy posts */}
+      {[-1, 1].map((s) => (
+        <mesh key={s} position={[s * (width / 2 - 1.4), height / 2, depth / 2 + 1.5]} castShadow>
+          <cylinderGeometry args={[0.13, 0.13, height, 8]} />
+          <meshStandardMaterial color="#9aa1a8" />
+        </mesh>
+      ))}
+      {/* glazing, both faces — landside and out over the apron */}
+      {Array.from({ length: glassCols }, (_, i) => (i - (glassCols - 1) / 2) * 2.4).map((x) => (
+        <group key={x}>
+          <mesh position={[x, 2.5, depth / 2 + 0.03]}>
+            <boxGeometry args={[1.9, 2.6, 0.06]} />
+            <meshStandardMaterial color="#bcdcec" emissive="#8fb8d4" emissiveIntensity={0.28} />
+          </mesh>
+          <mesh position={[x, 2.5, -depth / 2 - 0.03]}>
+            <boxGeometry args={[1.9, 2.6, 0.06]} />
+            <meshStandardMaterial color="#bcdcec" emissive="#8fb8d4" emissiveIntensity={0.28} />
+          </mesh>
+        </group>
+      ))}
+      {/* doors */}
+      <mesh position={[0, 1.5, depth / 2 + 0.05]}>
+        <boxGeometry args={[3.2, 3, 0.08]} />
+        <meshStandardMaterial color="#37424c" />
+      </mesh>
+      <mesh position={[0, 1.5, -depth / 2 - 0.05]}>
+        <boxGeometry args={[3.2, 3, 0.08]} />
+        <meshStandardMaterial color="#37424c" />
+      </mesh>
+    </group>
+  )
+}
+
 export function OfficeBuilding({
   position,
   rotation = 0,
