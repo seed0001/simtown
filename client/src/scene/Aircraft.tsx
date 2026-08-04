@@ -28,7 +28,7 @@ export function SmallPlane({ livery, accent }: { livery: string; accent: string 
       {/* cabin glass */}
       <mesh position={[0, 1.3, 1.15]}>
         <boxGeometry args={[0.8, 0.42, 1.5]} />
-        <meshStandardMaterial color="#2a3442" metalness={0.2} roughness={0.35} />
+        <meshStandardMaterial color="#2e2e2e" metalness={0.2} roughness={0.35} />
       </mesh>
       {/* stripe down the side */}
       <mesh position={[0, 0.72, 0.1]}>
@@ -45,13 +45,13 @@ export function SmallPlane({ livery, accent }: { livery: string; accent: string 
       {[-1, 1].map((s) => (
         <mesh key={s} position={[s * 1.6, 1.16, 0.85]} rotation-z={s * 0.5} castShadow>
           <boxGeometry args={[0.1, 0.86, 0.14]} />
-          <meshStandardMaterial color="#b8bcc2" />
+          <meshStandardMaterial color="#bcbcbc" />
         </mesh>
       ))}
       {/* wingtip lights */}
       {[
-        { x: -5.1, c: '#d64545' },
-        { x: 5.1, c: '#49c07a' },
+        { x: -5.1, c: '#3a3a3a' },
+        { x: 5.1, c: '#e8e8e8' },
       ].map((tip) => (
         <mesh key={tip.x} position={[tip.x, 1.52, 1.1]}>
           <boxGeometry args={[0.18, 0.14, 0.18]} />
@@ -73,11 +73,11 @@ export function SmallPlane({ livery, accent }: { livery: string; accent: string 
       <group ref={prop} position={[0, 0.95, 3.34]}>
         <mesh castShadow>
           <boxGeometry args={[0.16, 3.1, 0.06]} />
-          <meshStandardMaterial color="#2f3338" />
+          <meshStandardMaterial color="#2e2e2e" />
         </mesh>
         <mesh>
           <boxGeometry args={[3.1, 0.16, 0.06]} />
-          <meshStandardMaterial color="#2f3338" />
+          <meshStandardMaterial color="#2e2e2e" />
         </mesh>
       </group>
       <mesh position={[0, 0.95, 3.24]}>
@@ -94,11 +94,11 @@ export function SmallPlane({ livery, accent }: { livery: string; accent: string 
         <group key={`${x}-${z}`} position={[x, 0, z]}>
           <mesh position={[0, 0.34, 0]}>
             <cylinderGeometry args={[0.07, 0.07, 0.68, 6]} />
-            <meshStandardMaterial color="#8d9298" />
+            <meshStandardMaterial color="#909090" />
           </mesh>
           <mesh position={[0, 0.22, 0]} rotation-z={Math.PI / 2} castShadow>
             <cylinderGeometry args={[0.22, 0.22, 0.14, 10]} />
-            <meshStandardMaterial color="#26282c" />
+            <meshStandardMaterial color="#262626" />
           </mesh>
         </group>
       ))}
@@ -125,7 +125,7 @@ export function Helicopter({ livery, accent }: { livery: string; accent: string 
       {/* bubble canopy */}
       <mesh position={[0, 1.4, 1.25]}>
         <sphereGeometry args={[0.86, 12, 10]} />
-        <meshStandardMaterial color="#2a3442" metalness={0.2} roughness={0.3} />
+        <meshStandardMaterial color="#2e2e2e" metalness={0.2} roughness={0.3} />
       </mesh>
       {/* tail boom */}
       <mesh position={[0, 1.5, -1.9]} castShadow>
@@ -145,13 +145,13 @@ export function Helicopter({ livery, accent }: { livery: string; accent: string 
       {/* mast + main rotor */}
       <mesh position={[0, 2.36, 0.4]}>
         <cylinderGeometry args={[0.1, 0.12, 0.6, 8]} />
-        <meshStandardMaterial color="#8d9298" />
+        <meshStandardMaterial color="#909090" />
       </mesh>
       <group ref={mainRotor} position={[0, 2.66, 0.4]}>
         {[0, Math.PI / 2].map((r) => (
           <mesh key={r} rotation-y={r} castShadow>
             <boxGeometry args={[9.2, 0.08, 0.42]} />
-            <meshStandardMaterial color="#33383e" />
+            <meshStandardMaterial color="#343434" />
           </mesh>
         ))}
         <mesh>
@@ -164,7 +164,7 @@ export function Helicopter({ livery, accent }: { livery: string; accent: string 
       <group ref={tailRotor} position={[0.2, 1.5, -3.5]}>
         <mesh rotation-y={Math.PI / 2}>
           <boxGeometry args={[0.06, 1.5, 0.16]} />
-          <meshStandardMaterial color="#33383e" />
+          <meshStandardMaterial color="#343434" />
         </mesh>
       </group>
 
@@ -173,12 +173,12 @@ export function Helicopter({ livery, accent }: { livery: string; accent: string 
         <group key={x}>
           <mesh position={[x, 0.13, 0.4]} castShadow>
             <boxGeometry args={[0.13, 0.13, 3.1]} />
-            <meshStandardMaterial color="#8d9298" />
+            <meshStandardMaterial color="#909090" />
           </mesh>
           {[-0.55, 1.35].map((z) => (
             <mesh key={z} position={[x, 0.58, z]} rotation-x={0.15}>
               <boxGeometry args={[0.1, 0.9, 0.1]} />
-              <meshStandardMaterial color="#8d9298" />
+              <meshStandardMaterial color="#909090" />
             </mesh>
           ))}
         </group>
@@ -186,7 +186,7 @@ export function Helicopter({ livery, accent }: { livery: string; accent: string 
       {/* beacon */}
       <mesh position={[0, 2.3, -0.4]}>
         <boxGeometry args={[0.14, 0.14, 0.14]} />
-        <meshStandardMaterial color="#d64545" emissive="#d64545" emissiveIntensity={0.9} />
+        <meshStandardMaterial color="#eeeeee" emissive="#f4f4f4" emissiveIntensity={0.9} />
       </mesh>
     </group>
   )

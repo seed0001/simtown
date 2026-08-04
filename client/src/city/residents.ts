@@ -136,12 +136,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 1240,
     appearance: {
-      skin: '#6b4a35',
-      hair: '#231d1a',
+      skin: '#575757',
+      hair: '#1e1e1e',
       hairStyle: 'short',
-      shirt: '#f2efe6', // cook's whites
-      pants: '#3b4048',
-      shoes: '#2a2724',
+      shirt: '#efefef', // cook's whites
+      pants: '#3e3e3e',
+      shoes: '#262626',
       height: 1.03,
       build: 1.14,
     },
@@ -166,12 +166,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 6800,
     appearance: {
-      skin: '#6b4a35',
-      hair: '#241c18',
+      skin: '#575757',
+      hair: '#202020',
       hairStyle: 'bun',
-      shirt: '#7d8fa8',
-      pants: '#2f3440',
-      shoes: '#33302c',
+      shirt: '#8d8d8d',
+      pants: '#323232',
+      shoes: '#303030',
       height: 0.98,
       build: 0.95,
     },
@@ -196,12 +196,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 980,
     appearance: {
-      skin: '#e0b08a',
-      hair: '#8a6a3a',
+      skin: '#b9b9b9',
+      hair: '#6e6e6e',
       hairStyle: 'short',
-      shirt: '#4e8a5c', // grocer's green
-      pants: '#7a6a52',
-      shoes: '#4a3f34',
+      shirt: '#727272', // grocer's work shirt
+      pants: '#565656',
+      shoes: '#3c3c3c',
       height: 1.02,
       build: 1.06,
     },
@@ -226,12 +226,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 9400,
     appearance: {
-      skin: '#b3805a',
-      hair: '#1c1512',
+      skin: '#8c8c8c',
+      hair: '#171717',
       hairStyle: 'long',
-      shirt: '#2c3550', // blazer
-      pants: '#20263a',
-      shoes: '#26221f',
+      shirt: '#333333', // blazer
+      pants: '#262626',
+      shoes: '#222222',
       height: 0.99,
       build: 0.93,
     },
@@ -256,12 +256,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 210,
     appearance: {
-      skin: '#5a3d2b',
-      hair: '#1a1512',
+      skin: '#414141',
+      hair: '#161616',
       hairStyle: 'short',
-      shirt: '#8e2f28', // band tee
-      pants: '#2b3038',
-      shoes: '#d8d2c4',
+      shirt: '#565656', // band tee
+      pants: '#2c2c2c',
+      shoes: '#d4d4d4',
       height: 1.01,
       build: 0.97,
     },
@@ -286,12 +286,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 3150,
     appearance: {
-      skin: '#c99a72',
-      hair: '#2a211c',
+      skin: '#a4a4a4',
+      hair: '#232323',
       hairStyle: 'long',
-      shirt: '#39506b', // station polo
-      pants: '#2a2f38',
-      shoes: '#2e2b28',
+      shirt: '#4d4d4d', // station polo
+      pants: '#2b2b2b',
+      shoes: '#2d2d2d',
       height: 0.97,
       build: 1.0,
     },
@@ -316,12 +316,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 14500,
     appearance: {
-      skin: '#e8c4a0',
-      hair: '#c9c4bd', // gone grey
+      skin: '#cacaca',
+      hair: '#b0b0b0', // gone grey
       hairStyle: 'thin',
-      shirt: '#7a5f86', // cardigan
-      pants: '#4a4250',
-      shoes: '#3b3530',
+      shirt: '#6c6c6c', // cardigan
+      pants: '#444444',
+      shoes: '#363636',
       height: 0.95,
       build: 1.04,
     },

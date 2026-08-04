@@ -1,8 +1,8 @@
-import { Sky } from '@react-three/drei'
 import { BUILDINGS, STREETS, doorWorld, type BuildingEntry } from '../city/registry'
 import Airport from './Airport'
 import { GasStation, House, OfficeBuilding, Restaurant, Shop, Terminal } from './Buildings'
 import Flights from './Flights'
+import { GRAIN_BUMP, grainTexture } from './grain'
 import { StreetPeople } from './People'
 import { RoadNetwork, StreetLight, Tree } from './Props'
 import { AddressPlate, StreetSignPost } from './TextLabel'
@@ -90,13 +90,16 @@ const PLATE_Y: Record<BuildingEntry['kind'], number> = {
 
 export default function CityScene() {
   return (
-    <group>
-      {/* environment */}
-      <Sky sunPosition={[100, 60, 40]} turbidity={6} />
+    <>
+      {/* environment: a paper-white sky, gray haze, colorless light. Attached
+          at the scene root — inside the group they'd attach to the group and
+          silently do nothing. */}
+      <color attach="background" args={['#e6e6e6']} />
       {/* fog reaches past the airfield now, so the runway is visible from town */}
-      <fog attach="fog" args={['#cfe0ee', 70, 300]} />
+      <fog attach="fog" args={['#d8d8d8', 70, 300]} />
+    <group>
       <ambientLight intensity={0.55} />
-      <hemisphereLight args={['#bcd8f0', '#8a9a72', 0.35]} />
+      <hemisphereLight args={['#f4f4f4', '#8a8a8a', 0.35]} />
       {/* the shadow frustum has to cover the airport too; the bigger map keeps
           the town's shadows finer than they were before it was widened */}
       <directionalLight
@@ -115,7 +118,7 @@ export default function CityScene() {
       {/* ground */}
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
         <planeGeometry args={[300, 300]} />
-        <meshStandardMaterial color="#6f9e63" />
+        <meshStandardMaterial color="#a6a6a6" bumpMap={grainTexture(64)} bumpScale={GRAIN_BUMP} />
       </mesh>
 
       <RoadNetwork />
@@ -156,7 +159,7 @@ export default function CityScene() {
           key={i}
           position={pos}
           scale={0.85 + ((i * 7) % 5) * 0.12}
-          foliage={i % 3 === 0 ? '#55854a' : i % 3 === 1 ? '#4a7c3f' : '#628f50'}
+          foliage={i % 3 === 0 ? '#6a6a6a' : i % 3 === 1 ? '#565656' : '#7a7a7a'}
         />
       ))}
 
@@ -164,5 +167,6 @@ export default function CityScene() {
         <StreetLight key={i} position={s.pos} rotation={s.rot} />
       ))}
     </group>
+    </>
   )
 }

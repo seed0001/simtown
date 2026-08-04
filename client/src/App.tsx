@@ -70,6 +70,9 @@ export default function App() {
         />
       </Canvas>
 
+      {/* paper grain over the whole frame; HUD elements below stack above it */}
+      <div className="grain-overlay" />
+
       {!locked && (
         <div className="enter-overlay">
           <h1>SIMTOWN</h1>

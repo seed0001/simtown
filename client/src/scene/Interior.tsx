@@ -1,5 +1,6 @@
 import type { InteriorDef } from '../city/interiors'
 import { Furniture } from './Furniture'
+import { GRAIN_BUMP, grainTexture } from './grain'
 import { Occupants } from './People'
 import { SignPlate } from './TextLabel'
 
@@ -13,8 +14,10 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
   const segX = DOOR_W / 2 + segW / 2
 
   return (
+    <>
+    {/* scene-root attach; inside the group it would bind to the group and do nothing */}
+    <color attach="background" args={['#101010']} />
     <group>
-      <color attach="background" args={['#0b0b12']} />
       <ambientLight intensity={0.75} />
       <pointLight position={[-w / 4, 2.7, 0]} intensity={30} distance={22} decay={1.6} castShadow />
       <pointLight position={[w / 4, 2.7, 0]} intensity={30} distance={22} decay={1.6} />
@@ -22,31 +25,31 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
       {/* floor */}
       <mesh rotation-x={-Math.PI / 2} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color={def.floorColor} />
+        <meshStandardMaterial color={def.floorColor} bumpMap={grainTexture(10)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* ceiling */}
       <mesh rotation-x={Math.PI / 2} position={[0, WALL_H, 0]}>
         <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#efe9dc" />
+        <meshStandardMaterial color="#ececec" />
       </mesh>
 
       {/* back wall */}
       <mesh position={[0, WALL_H / 2, -d / 2]} receiveShadow>
         <boxGeometry args={[w, WALL_H, 0.2]} />
-        <meshStandardMaterial color={def.wallColor} />
+        <meshStandardMaterial color={def.wallColor} bumpMap={grainTexture(8, 3)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* side walls */}
       {[-w / 2, w / 2].map((x) => (
         <mesh key={x} position={[x, WALL_H / 2, 0]} receiveShadow>
           <boxGeometry args={[0.2, WALL_H, d]} />
-          <meshStandardMaterial color={def.wallColor} />
+          <meshStandardMaterial color={def.wallColor} bumpMap={grainTexture(8, 3)} bumpScale={GRAIN_BUMP} />
         </mesh>
       ))}
       {/* front wall, split around the door gap */}
       {[-segX, segX].map((x) => (
         <mesh key={x} position={[x, WALL_H / 2, d / 2]} receiveShadow>
           <boxGeometry args={[segW, WALL_H, 0.2]} />
-          <meshStandardMaterial color={def.wallColor} />
+          <meshStandardMaterial color={def.wallColor} bumpMap={grainTexture(8, 3)} bumpScale={GRAIN_BUMP} />
         </mesh>
       ))}
       {/* lintel above the door */}
@@ -58,7 +61,7 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
       {[-DOOR_W / 2, DOOR_W / 2].map((x) => (
         <mesh key={x} position={[x, 1.35, d / 2]}>
           <boxGeometry args={[0.1, 2.7, 0.26]} />
-          <meshStandardMaterial color="#6b4a2f" />
+          <meshStandardMaterial color="#4a4a4a" />
         </mesh>
       ))}
 
@@ -68,7 +71,7 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
         rotation={Math.PI}
         width={0.9}
         height={0.35}
-        bg="#1e6b3a"
+        bg="#2a2a2a"
       />
 
       {def.items.map((item, i) => (
@@ -77,5 +80,6 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
 
       <Occupants buildingId={id} def={def} />
     </group>
+    </>
   )
 }

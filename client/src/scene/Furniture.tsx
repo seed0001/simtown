@@ -1,13 +1,15 @@
 import type { FurnitureItem } from '../city/interiors'
 
 // Simple box/cylinder furniture. Each piece sits on y=0 in room space.
+// Grayscale throughout: wood, upholstery, and appliances are told apart by
+// value alone, so neighbouring parts keep at least a step of contrast.
 
-function Bed({ color = '#b3564d' }: { color?: string }) {
+function Bed({ color = '#5e5e5e' }: { color?: string }) {
   return (
     <group>
       <mesh position={[0, 0.25, 0]} castShadow>
         <boxGeometry args={[1.9, 0.5, 2.9]} />
-        <meshStandardMaterial color="#8a6a4a" />
+        <meshStandardMaterial color="#707070" />
       </mesh>
       <mesh position={[0, 0.55, 0.25]}>
         <boxGeometry args={[1.7, 0.25, 2.2]} />
@@ -15,11 +17,11 @@ function Bed({ color = '#b3564d' }: { color?: string }) {
       </mesh>
       <mesh position={[0, 0.58, -1.05]}>
         <boxGeometry args={[1.7, 0.22, 0.6]} />
-        <meshStandardMaterial color="#f2ede2" />
+        <meshStandardMaterial color="#efefef" />
       </mesh>
       <mesh position={[0, 0.7, -1.4]}>
         <boxGeometry args={[1.9, 0.9, 0.12]} />
-        <meshStandardMaterial color="#6b4a2f" />
+        <meshStandardMaterial color="#515151" />
       </mesh>
     </group>
   )
@@ -30,17 +32,17 @@ function Table() {
     <group>
       <mesh position={[0, 0.74, 0]} castShadow>
         <boxGeometry args={[1.5, 0.07, 1]} />
-        <meshStandardMaterial color="#8a6a4a" />
+        <meshStandardMaterial color="#707070" />
       </mesh>
       <mesh position={[0, 0.37, 0]}>
         <cylinderGeometry args={[0.09, 0.14, 0.72, 8]} />
-        <meshStandardMaterial color="#6b4a2f" />
+        <meshStandardMaterial color="#515151" />
       </mesh>
     </group>
   )
 }
 
-function Chair({ color = '#7a5a3a' }: { color?: string }) {
+function Chair({ color = '#5e5e5e' }: { color?: string }) {
   return (
     <group>
       <mesh position={[0, 0.45, 0]} castShadow>
@@ -59,12 +61,12 @@ function Chair({ color = '#7a5a3a' }: { color?: string }) {
   )
 }
 
-function Stool({ color = '#c0392b' }: { color?: string }) {
+function Stool({ color = '#4a4a4a' }: { color?: string }) {
   return (
     <group>
       <mesh position={[0, 0.33, 0]}>
         <cylinderGeometry args={[0.07, 0.1, 0.66, 8]} />
-        <meshStandardMaterial color="#9a9aa0" />
+        <meshStandardMaterial color="#9c9c9c" />
       </mesh>
       <mesh position={[0, 0.7, 0]} castShadow>
         <cylinderGeometry args={[0.26, 0.26, 0.1, 12]} />
@@ -74,7 +76,7 @@ function Stool({ color = '#c0392b' }: { color?: string }) {
   )
 }
 
-function Sofa({ color = '#4a5a78' }: { color?: string }) {
+function Sofa({ color = '#565656' }: { color?: string }) {
   return (
     <group>
       <mesh position={[0, 0.3, 0]} castShadow>
@@ -95,7 +97,7 @@ function Sofa({ color = '#4a5a78' }: { color?: string }) {
   )
 }
 
-function Bench({ color = '#b3564d' }: { color?: string }) {
+function Bench({ color = '#5e5e5e' }: { color?: string }) {
   return (
     <group>
       <mesh position={[0, 0.28, 0]} castShadow>
@@ -110,7 +112,7 @@ function Bench({ color = '#b3564d' }: { color?: string }) {
   )
 }
 
-function Rug({ color = '#b3564d', size = 1.5 }: { color?: string; size?: number }) {
+function Rug({ color = '#787878', size = 1.5 }: { color?: string; size?: number }) {
   return (
     <mesh position={[0, 0.015, 0]} rotation-x={-Math.PI / 2}>
       <circleGeometry args={[size, 24]} />
@@ -119,7 +121,7 @@ function Rug({ color = '#b3564d', size = 1.5 }: { color?: string; size?: number 
   )
 }
 
-function Counter({ color = '#8a8f96', size = 3 }: { color?: string; size?: number }) {
+function Counter({ color = '#8e8e8e', size = 3 }: { color?: string; size?: number }) {
   return (
     <group>
       <mesh position={[0, 0.45, 0]} castShadow>
@@ -128,7 +130,7 @@ function Counter({ color = '#8a8f96', size = 3 }: { color?: string; size?: numbe
       </mesh>
       <mesh position={[0, 0.93, 0]}>
         <boxGeometry args={[size + 0.1, 0.06, 0.7]} />
-        <meshStandardMaterial color="#e8e4da" />
+        <meshStandardMaterial color="#e4e4e4" />
       </mesh>
     </group>
   )
@@ -139,11 +141,11 @@ function Fridge() {
     <group>
       <mesh position={[0, 0.95, 0]} castShadow>
         <boxGeometry args={[0.8, 1.9, 0.7]} />
-        <meshStandardMaterial color="#dfe3e6" />
+        <meshStandardMaterial color="#e0e0e0" />
       </mesh>
       <mesh position={[0.32, 1.2, 0.36]}>
         <boxGeometry args={[0.06, 0.5, 0.05]} />
-        <meshStandardMaterial color="#9aa0a6" />
+        <meshStandardMaterial color="#9e9e9e" />
       </mesh>
     </group>
   )
@@ -154,17 +156,18 @@ function Stove() {
     <group>
       <mesh position={[0, 0.45, 0]} castShadow>
         <boxGeometry args={[0.8, 0.9, 0.65]} />
-        <meshStandardMaterial color="#c9ccd1" />
+        <meshStandardMaterial color="#cacaca" />
       </mesh>
       <mesh position={[0, 0.92, 0]}>
         <boxGeometry args={[0.75, 0.04, 0.6]} />
-        <meshStandardMaterial color="#2b2b30" />
+        <meshStandardMaterial color="#2b2b2b" />
       </mesh>
     </group>
   )
 }
 
-const GOODS_COLORS = ['#c0392b', '#2d6cdf', '#e0a020', '#00885a', '#6c5ce7', '#d8d8d8']
+// a value ramp instead of a hue wheel, so shelves still read as stocked
+const GOODS_COLORS = ['#3a3a3a', '#787878', '#c8c8c8', '#585858', '#9a9a9a', '#e0e0e0']
 
 function Shelf({ size = 4 }: { size?: number }) {
   const goods: { x: number; y: number; c: string }[] = []
@@ -184,13 +187,13 @@ function Shelf({ size = 4 }: { size?: number }) {
       {[-size / 2, size / 2].map((x) => (
         <mesh key={x} position={[x, 0.7, 0]}>
           <boxGeometry args={[0.06, 1.4, 0.45]} />
-          <meshStandardMaterial color="#7d858d" />
+          <meshStandardMaterial color="#828282" />
         </mesh>
       ))}
       {[0.35, 0.8, 1.25].map((y) => (
         <mesh key={y} position={[0, y, 0]} castShadow>
           <boxGeometry args={[size, 0.05, 0.45]} />
-          <meshStandardMaterial color="#9aa0a6" />
+          <meshStandardMaterial color="#9e9e9e" />
         </mesh>
       ))}
       {goods.map((g, i) => (
@@ -208,11 +211,11 @@ function Plant() {
     <group>
       <mesh position={[0, 0.22, 0]}>
         <cylinderGeometry args={[0.22, 0.16, 0.44, 10]} />
-        <meshStandardMaterial color="#a05a3c" />
+        <meshStandardMaterial color="#6a6a6a" />
       </mesh>
       <mesh position={[0, 0.75, 0]} castShadow>
         <sphereGeometry args={[0.4, 9, 7]} />
-        <meshStandardMaterial color="#4a7c3f" flatShading />
+        <meshStandardMaterial color="#5c5c5c" flatShading />
       </mesh>
     </group>
   )
@@ -223,11 +226,11 @@ function Lamp() {
     <group>
       <mesh position={[0, 0.7, 0]}>
         <cylinderGeometry args={[0.04, 0.14, 1.4, 8]} />
-        <meshStandardMaterial color="#3a3f45" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
       <mesh position={[0, 1.5, 0]}>
         <coneGeometry args={[0.3, 0.35, 12, 1, true]} />
-        <meshStandardMaterial color="#f2e2b8" emissive="#ffe9a0" emissiveIntensity={0.5} />
+        <meshStandardMaterial color="#ececec" emissive="#e8e8e8" emissiveIntensity={0.5} />
       </mesh>
     </group>
   )
@@ -238,17 +241,17 @@ function Tv() {
     <group>
       <mesh position={[0, 0.25, 0]} castShadow>
         <boxGeometry args={[1.6, 0.5, 0.4]} />
-        <meshStandardMaterial color="#6b4a2f" />
+        <meshStandardMaterial color="#515151" />
       </mesh>
       <mesh position={[0, 0.95, 0]}>
         <boxGeometry args={[1.4, 0.8, 0.08]} />
-        <meshStandardMaterial color="#15161a" emissive="#1e2a3a" emissiveIntensity={0.4} />
+        <meshStandardMaterial color="#161616" emissive="#242424" emissiveIntensity={0.4} />
       </mesh>
     </group>
   )
 }
 
-function Desk({ color = '#4a5a78', size = 4 }: { color?: string; size?: number }) {
+function Desk({ color = '#565656', size = 4 }: { color?: string; size?: number }) {
   return (
     <group>
       <mesh position={[0, 0.5, 0]} castShadow>
@@ -257,7 +260,7 @@ function Desk({ color = '#4a5a78', size = 4 }: { color?: string; size?: number }
       </mesh>
       <mesh position={[0, 1.03, 0]}>
         <boxGeometry args={[size + 0.15, 0.07, 0.95]} />
-        <meshStandardMaterial color="#e8e4da" />
+        <meshStandardMaterial color="#e4e4e4" />
       </mesh>
     </group>
   )
@@ -268,11 +271,11 @@ function Elevator() {
     <group>
       <mesh position={[0, 1.25, 0]}>
         <boxGeometry args={[1.5, 2.5, 0.15]} />
-        <meshStandardMaterial color="#7d858d" metalness={0.6} roughness={0.35} />
+        <meshStandardMaterial color="#828282" metalness={0.6} roughness={0.35} />
       </mesh>
       <mesh position={[0, 1.25, 0.05]}>
         <boxGeometry args={[0.05, 2.3, 0.12]} />
-        <meshStandardMaterial color="#3a3f45" />
+        <meshStandardMaterial color="#3a3a3a" />
       </mesh>
     </group>
   )

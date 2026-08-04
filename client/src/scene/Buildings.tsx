@@ -1,5 +1,13 @@
 // Low-poly procedural buildings. All buildings sit on y=0 and face +z in local
 // space — use the rotation prop to orient them toward a road.
+//
+// The town renders in strict grayscale: every material is a designed gray, and
+// the big wall surfaces carry the shared grain texture so light gives them
+// tooth. Contrast does the work color used to — dark roofs on pale bodies,
+// near-black doors and awnings as graphic accents, pale window glass that
+// glows faintly white.
+
+import { GRAIN_BUMP, grainTexture } from './grain'
 
 type BuildingProps = {
   position: [number, number, number]
@@ -9,15 +17,15 @@ type BuildingProps = {
 export function House({
   position,
   rotation = 0,
-  bodyColor = '#e8d8b0',
-  roofColor = '#8c4a3c',
+  bodyColor = '#dcdcdc',
+  roofColor = '#4e4e4e',
 }: BuildingProps & { bodyColor?: string; roofColor?: string }) {
   return (
     <group position={position} rotation-y={rotation}>
       {/* body */}
       <mesh position={[0, 1.6, 0]} castShadow receiveShadow>
         <boxGeometry args={[6, 3.2, 5]} />
-        <meshStandardMaterial color={bodyColor} />
+        <meshStandardMaterial color={bodyColor} bumpMap={grainTexture(5)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* pyramid roof */}
       <mesh position={[0, 4.3, 0]} rotation-y={Math.PI / 4} castShadow>
@@ -27,18 +35,18 @@ export function House({
       {/* chimney */}
       <mesh position={[1.6, 4.8, -1]} castShadow>
         <boxGeometry args={[0.7, 1.6, 0.7]} />
-        <meshStandardMaterial color="#7a6a5a" />
+        <meshStandardMaterial color="#6a6a6a" />
       </mesh>
       {/* door */}
       <mesh position={[0, 1, 2.51]}>
         <boxGeometry args={[1.1, 2, 0.08]} />
-        <meshStandardMaterial color="#5a3825" />
+        <meshStandardMaterial color="#333333" />
       </mesh>
       {/* windows */}
       {[-1.8, 1.8].map((x) => (
         <mesh key={x} position={[x, 1.9, 2.51]}>
           <boxGeometry args={[1.2, 1, 0.08]} />
-          <meshStandardMaterial color="#bfe3f2" emissive="#9cc8dd" emissiveIntensity={0.25} />
+          <meshStandardMaterial color="#e4e4e4" emissive="#d2d2d2" emissiveIntensity={0.25} />
         </mesh>
       ))}
     </group>
@@ -51,46 +59,46 @@ export function Restaurant({ position, rotation = 0 }: BuildingProps) {
       {/* body */}
       <mesh position={[0, 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[14, 4, 10]} />
-        <meshStandardMaterial color="#efe3cd" />
+        <meshStandardMaterial color="#e6e6e6" bumpMap={grainTexture(8)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* parapet */}
       <mesh position={[0, 4.2, 0]} castShadow>
         <boxGeometry args={[14.4, 0.4, 10.4]} />
-        <meshStandardMaterial color="#b3564d" />
+        <meshStandardMaterial color="#4e4e4e" />
       </mesh>
       {/* striped awning */}
       {[-5, -3, -1, 1, 3, 5].map((x, i) => (
         <mesh key={x} position={[x, 3.1, 5.8]} rotation-x={0.35}>
           <boxGeometry args={[2, 0.12, 1.8]} />
-          <meshStandardMaterial color={i % 2 === 0 ? '#c0392b' : '#f5f0e6'} />
+          <meshStandardMaterial color={i % 2 === 0 ? '#383838' : '#f0f0f0'} />
         </mesh>
       ))}
       {/* storefront windows */}
       {[-4.2, 4.2].map((x) => (
         <mesh key={x} position={[x, 1.9, 5.05]}>
           <boxGeometry args={[4, 1.8, 0.08]} />
-          <meshStandardMaterial color="#cdeaf5" emissive="#a8d4e8" emissiveIntensity={0.35} />
+          <meshStandardMaterial color="#e8e8e8" emissive="#d6d6d6" emissiveIntensity={0.35} />
         </mesh>
       ))}
       {/* door */}
       <mesh position={[0, 1.2, 5.05]}>
         <boxGeometry args={[1.5, 2.4, 0.08]} />
-        <meshStandardMaterial color="#7a3b2e" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
-      {/* roof sign: red panel with white bar (reads as "DINER") */}
+      {/* roof sign: dark panel with a glowing white bar (reads as "DINER") */}
       {[-2, 2].map((x) => (
         <mesh key={x} position={[x, 4.9, 3.5]}>
           <boxGeometry args={[0.25, 1.2, 0.25]} />
-          <meshStandardMaterial color="#555" />
+          <meshStandardMaterial color="#4a4a4a" />
         </mesh>
       ))}
       <mesh position={[0, 5.9, 3.5]} castShadow>
         <boxGeometry args={[6.5, 1.7, 0.4]} />
-        <meshStandardMaterial color="#c0392b" />
+        <meshStandardMaterial color="#2a2a2a" />
       </mesh>
       <mesh position={[0, 5.9, 3.72]}>
         <boxGeometry args={[5.4, 0.8, 0.06]} />
-        <meshStandardMaterial color="#fdf6e3" emissive="#fdf6e3" emissiveIntensity={0.5} />
+        <meshStandardMaterial color="#f4f4f4" emissive="#f4f4f4" emissiveIntensity={0.5} />
       </mesh>
     </group>
   )
@@ -102,17 +110,17 @@ export function GasStation({ position, rotation = 0 }: BuildingProps) {
       {/* concrete pad */}
       <mesh position={[0, 0.05, 0]} receiveShadow>
         <boxGeometry args={[18, 0.1, 14]} />
-        <meshStandardMaterial color="#9a9aa0" />
+        <meshStandardMaterial color="#9c9c9c" bumpMap={grainTexture(10)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* canopy */}
       <mesh position={[0, 5, 1.5]} castShadow>
         <boxGeometry args={[12, 0.5, 8]} />
         <meshStandardMaterial color="#f2f2f2" />
       </mesh>
-      {/* red fascia stripe on canopy front */}
+      {/* dark fascia stripe on canopy front */}
       <mesh position={[0, 5, 5.55]}>
         <boxGeometry args={[12, 0.5, 0.15]} />
-        <meshStandardMaterial color="#d63031" />
+        <meshStandardMaterial color="#303030" />
       </mesh>
       {/* canopy pillars */}
       {[
@@ -135,32 +143,32 @@ export function GasStation({ position, rotation = 0 }: BuildingProps) {
           </mesh>
           <mesh position={[0, 1.15, 0]}>
             <boxGeometry args={[0.92, 0.35, 0.62]} />
-            <meshStandardMaterial color="#d63031" />
+            <meshStandardMaterial color="#303030" />
           </mesh>
         </group>
       ))}
       {/* shop */}
       <mesh position={[0, 1.75, -4.8]} castShadow receiveShadow>
         <boxGeometry args={[9, 3.5, 5]} />
-        <meshStandardMaterial color="#dcdcdc" />
+        <meshStandardMaterial color="#dcdcdc" bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} />
       </mesh>
       <mesh position={[0, 1.6, -2.26]}>
         <boxGeometry args={[6, 1.8, 0.08]} />
-        <meshStandardMaterial color="#bfe3f2" emissive="#9cc8dd" emissiveIntensity={0.35} />
+        <meshStandardMaterial color="#e4e4e4" emissive="#d2d2d2" emissiveIntensity={0.35} />
       </mesh>
       {/* tall road sign */}
       <group position={[7.5, 0, 5.5]}>
         <mesh position={[0, 3, 0]} castShadow>
           <cylinderGeometry args={[0.14, 0.14, 6, 8]} />
-          <meshStandardMaterial color="#555" />
+          <meshStandardMaterial color="#4a4a4a" />
         </mesh>
         <mesh position={[0, 6.6, 0]} castShadow>
           <boxGeometry args={[2.6, 1.8, 0.3]} />
-          <meshStandardMaterial color="#d63031" />
+          <meshStandardMaterial color="#2e2e2e" />
         </mesh>
         <mesh position={[0, 6.6, 0.18]}>
           <boxGeometry args={[2, 0.7, 0.06]} />
-          <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.5} />
+          <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
         </mesh>
       </group>
     </group>
@@ -170,18 +178,18 @@ export function GasStation({ position, rotation = 0 }: BuildingProps) {
 export function Shop({
   position,
   rotation = 0,
-  color = '#c9b8d8',
-  awningColor = '#6c5ce7',
+  color = '#c6c6c6',
+  awningColor = '#3e3e3e',
 }: BuildingProps & { color?: string; awningColor?: string }) {
   return (
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, 1.75, 0]} castShadow receiveShadow>
         <boxGeometry args={[8, 3.5, 8]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} />
       </mesh>
       <mesh position={[0, 3.7, 0]} castShadow>
         <boxGeometry args={[8.4, 0.4, 8.4]} />
-        <meshStandardMaterial color="#6b6b70" />
+        <meshStandardMaterial color="#6b6b6b" />
       </mesh>
       <mesh position={[0, 3, 4.6]} rotation-x={0.35}>
         <boxGeometry args={[7, 0.12, 1.5]} />
@@ -189,11 +197,11 @@ export function Shop({
       </mesh>
       <mesh position={[-1.6, 1.7, 4.05]}>
         <boxGeometry args={[3.2, 1.6, 0.08]} />
-        <meshStandardMaterial color="#cdeaf5" emissive="#a8d4e8" emissiveIntensity={0.3} />
+        <meshStandardMaterial color="#e8e8e8" emissive="#d6d6d6" emissiveIntensity={0.3} />
       </mesh>
       <mesh position={[2.4, 1.1, 4.05]}>
         <boxGeometry args={[1.3, 2.2, 0.08]} />
-        <meshStandardMaterial color="#4a3728" />
+        <meshStandardMaterial color="#3a3a3a" />
       </mesh>
     </group>
   )
@@ -210,8 +218,8 @@ export function Terminal({
   width = 18,
   depth = 11,
   height = 5.4,
-  color = '#d9dde2',
-  roofColor = '#5a6b78',
+  color = '#dadada',
+  roofColor = '#5e5e5e',
 }: BuildingProps & {
   width?: number
   depth?: number
@@ -224,7 +232,7 @@ export function Terminal({
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} bumpMap={grainTexture(8)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* flat roof with an overhanging canopy on the landside */}
       <mesh position={[0, height + 0.2, 0.6]} castShadow>
@@ -235,7 +243,7 @@ export function Terminal({
       {[-1, 1].map((s) => (
         <mesh key={s} position={[s * (width / 2 - 1.4), height / 2, depth / 2 + 1.5]} castShadow>
           <cylinderGeometry args={[0.13, 0.13, height, 8]} />
-          <meshStandardMaterial color="#9aa1a8" />
+          <meshStandardMaterial color="#a0a0a0" />
         </mesh>
       ))}
       {/* glazing, both faces — landside and out over the apron */}
@@ -243,22 +251,22 @@ export function Terminal({
         <group key={x}>
           <mesh position={[x, 2.5, depth / 2 + 0.03]}>
             <boxGeometry args={[1.9, 2.6, 0.06]} />
-            <meshStandardMaterial color="#bcdcec" emissive="#8fb8d4" emissiveIntensity={0.28} />
+            <meshStandardMaterial color="#dcdcdc" emissive="#c4c4c4" emissiveIntensity={0.28} />
           </mesh>
           <mesh position={[x, 2.5, -depth / 2 - 0.03]}>
             <boxGeometry args={[1.9, 2.6, 0.06]} />
-            <meshStandardMaterial color="#bcdcec" emissive="#8fb8d4" emissiveIntensity={0.28} />
+            <meshStandardMaterial color="#dcdcdc" emissive="#c4c4c4" emissiveIntensity={0.28} />
           </mesh>
         </group>
       ))}
       {/* doors */}
       <mesh position={[0, 1.5, depth / 2 + 0.05]}>
         <boxGeometry args={[3.2, 3, 0.08]} />
-        <meshStandardMaterial color="#37424c" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
       <mesh position={[0, 1.5, -depth / 2 - 0.05]}>
         <boxGeometry args={[3.2, 3, 0.08]} />
-        <meshStandardMaterial color="#37424c" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
     </group>
   )
@@ -270,7 +278,7 @@ export function OfficeBuilding({
   width = 10,
   depth = 10,
   height = 16,
-  color = '#8fa3b8',
+  color = '#a2a2a2',
 }: BuildingProps & { width?: number; depth?: number; height?: number; color?: string }) {
   const floors = Math.floor((height - 2) / 3)
   const cols = Math.floor((width - 2) / 2.2)
@@ -286,34 +294,34 @@ export function OfficeBuilding({
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} bumpMap={grainTexture(6, 10)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* roof lip + rooftop unit */}
       <mesh position={[0, height + 0.15, 0]}>
         <boxGeometry args={[width + 0.4, 0.3, depth + 0.4]} />
-        <meshStandardMaterial color="#5c6670" />
+        <meshStandardMaterial color="#606060" />
       </mesh>
       <mesh position={[width / 6, height + 0.8, -depth / 6]} castShadow>
         <boxGeometry args={[2, 1.2, 1.6]} />
-        <meshStandardMaterial color="#7d858d" />
+        <meshStandardMaterial color="#828282" />
       </mesh>
       {/* window grid, front and back */}
       {windows.map(([x, y], i) => (
         <group key={i}>
           <mesh position={[x, y, depth / 2 + 0.02]}>
             <boxGeometry args={[1.3, 1.5, 0.05]} />
-            <meshStandardMaterial color="#b8d4e8" emissive="#8fb8d4" emissiveIntensity={0.3} />
+            <meshStandardMaterial color="#d6d6d6" emissive="#c0c0c0" emissiveIntensity={0.3} />
           </mesh>
           <mesh position={[x, y, -depth / 2 - 0.02]}>
             <boxGeometry args={[1.3, 1.5, 0.05]} />
-            <meshStandardMaterial color="#b8d4e8" emissive="#8fb8d4" emissiveIntensity={0.3} />
+            <meshStandardMaterial color="#d6d6d6" emissive="#c0c0c0" emissiveIntensity={0.3} />
           </mesh>
         </group>
       ))}
       {/* entrance */}
       <mesh position={[0, 1.4, depth / 2 + 0.03]}>
         <boxGeometry args={[2.6, 2.8, 0.06]} />
-        <meshStandardMaterial color="#3d4852" />
+        <meshStandardMaterial color="#404040" />
       </mesh>
     </group>
   )

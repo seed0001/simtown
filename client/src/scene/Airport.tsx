@@ -10,15 +10,16 @@ import {
   TOWER,
   WINDSOCK,
 } from '../city/airport'
+import { GRAIN_BUMP, grainTexture } from './grain'
 import { SignPlate } from './TextLabel'
 
 // Simtown Municipal. Static scenery only — the aircraft live in Flights.tsx.
 // Pavement is drawn as flat planes stacked just above the ground, in the same
 // way RoadNetwork lays down the streets.
 
-const ASPHALT = '#3c3c44'
-const CONCRETE = '#8e8e94'
-const PAINT = '#e8e4d8'
+const ASPHALT = '#3a3a3a'
+const CONCRETE = '#929292'
+const PAINT = '#ececec'
 
 function Pavement({
   x,
@@ -38,7 +39,11 @@ function Pavement({
   return (
     <mesh position={[x, y, z]} rotation-x={-Math.PI / 2} receiveShadow>
       <planeGeometry args={[width, depth]} />
-      <meshStandardMaterial color={color} />
+      <meshStandardMaterial
+        color={color}
+        bumpMap={grainTexture(Math.max(1, Math.round(width / 4)), Math.max(1, Math.round(depth / 4)))}
+        bumpScale={GRAIN_BUMP}
+      />
     </mesh>
   )
 }
@@ -79,7 +84,7 @@ function Runway() {
         [-1, 1].map((side) => (
           <mesh key={`${z}-${side}`} position={[RUNWAY.x + side * (RUNWAY.width / 2 + 0.7), 0.16, z]}>
             <boxGeometry args={[0.2, 0.3, 0.2]} />
-            <meshStandardMaterial color="#fff2c0" emissive="#ffe9a0" emissiveIntensity={0.7} />
+            <meshStandardMaterial color="#f4f4f4" emissive="#eaeaea" emissiveIntensity={0.7} />
           </mesh>
         )),
       )}
@@ -93,7 +98,7 @@ function Helipad() {
     <group position={[HELIPAD.x, 0.032, HELIPAD.z]} rotation-x={-Math.PI / 2}>
       <mesh>
         <circleGeometry args={[HELIPAD.radius, ring]} />
-        <meshStandardMaterial color="#4a4a52" />
+        <meshStandardMaterial color="#484848" />
       </mesh>
       <mesh position={[0, 0, 0.002]}>
         <ringGeometry args={[HELIPAD.radius - 0.55, HELIPAD.radius - 0.15, ring]} />
@@ -123,12 +128,12 @@ function Hangar() {
       {/* back and sides */}
       <mesh position={[0, h / 2, -d / 2]} castShadow receiveShadow>
         <boxGeometry args={[w, h, 0.4]} />
-        <meshStandardMaterial color="#9aa1a8" />
+        <meshStandardMaterial color="#9e9e9e" bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {[-w / 2, w / 2].map((x) => (
         <mesh key={x} position={[x, h / 2, 0]} castShadow receiveShadow>
           <boxGeometry args={[0.4, h, d]} />
-          <meshStandardMaterial color="#9aa1a8" />
+          <meshStandardMaterial color="#9e9e9e" bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} />
         </mesh>
       ))}
       {/* Barrel roof. Rotated about X so the axis runs front-to-back over the
@@ -137,17 +142,17 @@ function Hangar() {
           scale flattens a semicircle into a shallower arch. */}
       <mesh position={[0, h, 0]} rotation-x={-Math.PI / 2} scale={[1, 1, 0.42]} castShadow>
         <cylinderGeometry args={[w / 2, w / 2, d, 18, 1, false, -Math.PI / 2, Math.PI]} />
-        <meshStandardMaterial color="#b6bcc2" flatShading />
+        <meshStandardMaterial color="#bababa" flatShading />
       </mesh>
       {/* opening faces the apron (+z): a lintel above, doors parked either side */}
       <mesh position={[0, h - 0.6, d / 2]} castShadow>
         <boxGeometry args={[w, 1.2, 0.4]} />
-        <meshStandardMaterial color="#8b9299" />
+        <meshStandardMaterial color="#929292" />
       </mesh>
       {[-1, 1].map((s) => (
         <mesh key={s} position={[s * (w / 2 - 2.2), (h - 1.2) / 2, d / 2]} castShadow>
           <boxGeometry args={[4.2, h - 1.2, 0.35]} />
-          <meshStandardMaterial color="#6f767d" />
+          <meshStandardMaterial color="#727272" />
         </mesh>
       ))}
       <SignPlate
@@ -155,7 +160,7 @@ function Hangar() {
         position={[0, h + 0.6, d / 2 + 0.1]}
         width={5}
         height={0.9}
-        bg="#2f3338"
+        bg="#2c2c2c"
       />
     </group>
   )
@@ -166,21 +171,21 @@ function ControlTower() {
     <group position={[TOWER.x, 0, TOWER.z]}>
       <mesh position={[0, 5, 0]} castShadow receiveShadow>
         <boxGeometry args={[4, 10, 4]} />
-        <meshStandardMaterial color="#c3c8cd" />
+        <meshStandardMaterial color="#c6c6c6" bumpMap={grainTexture(3, 7)} bumpScale={GRAIN_BUMP} />
       </mesh>
       {/* glazed cab, slightly proud of the shaft */}
       <mesh position={[0, 11, 0]} castShadow>
         <boxGeometry args={[5.4, 2.4, 5.4]} />
-        <meshStandardMaterial color="#2a3442" metalness={0.2} roughness={0.35} />
+        <meshStandardMaterial color="#2e2e2e" metalness={0.2} roughness={0.35} />
       </mesh>
       <mesh position={[0, 12.35, 0]} castShadow>
         <boxGeometry args={[5.8, 0.4, 5.8]} />
-        <meshStandardMaterial color="#9aa1a8" />
+        <meshStandardMaterial color="#9e9e9e" />
       </mesh>
       {/* rotating beacon */}
       <mesh position={[0, 12.85, 0]}>
         <boxGeometry args={[0.4, 0.5, 0.4]} />
-        <meshStandardMaterial color="#49c07a" emissive="#49c07a" emissiveIntensity={1.1} />
+        <meshStandardMaterial color="#e8e8e8" emissive="#f4f4f4" emissiveIntensity={1.1} />
       </mesh>
     </group>
   )
@@ -197,14 +202,14 @@ function Windsock() {
     <group position={[WINDSOCK.x, 0, WINDSOCK.z]}>
       <mesh position={[0, 2.4, 0]} castShadow>
         <cylinderGeometry args={[0.08, 0.1, 4.8, 8]} />
-        <meshStandardMaterial color="#3a3f45" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
       <group ref={sock} position={[0, 4.6, 0]}>
         {[0, 1, 2].map((i) => (
           <mesh key={i} position={[0, 0, 0.6 + i * 0.85]} rotation-x={Math.PI / 2} castShadow>
             <cylinderGeometry args={[0.44 - i * 0.1, 0.52 - i * 0.1, 0.85, 10, 1, true]} />
             <meshStandardMaterial
-              color={i % 2 === 0 ? '#e8622a' : '#f0f0ee'}
+              color={i % 2 === 0 ? '#3e3e3e' : '#efefef'}
               side={THREE.DoubleSide}
             />
           </mesh>
@@ -231,13 +236,13 @@ function Fence() {
       {posts.map((z) => (
         <mesh key={z} position={[68, 0.9, z]} castShadow>
           <boxGeometry args={[0.12, 1.8, 0.12]} />
-          <meshStandardMaterial color="#7c8288" />
+          <meshStandardMaterial color="#808080" />
         </mesh>
       ))}
       {[1.7, 0.95].map((y) => (
         <mesh key={y} position={[68, y, midZ]}>
           <boxGeometry args={[0.06, 0.08, span]} />
-          <meshStandardMaterial color="#7c8288" />
+          <meshStandardMaterial color="#808080" />
         </mesh>
       ))}
     </group>
@@ -265,7 +270,7 @@ export default function Airport() {
       ].map(([x, z]) => (
         <mesh key={`${x}-${z}`} position={[x, 0.03, z]} rotation-x={-Math.PI / 2}>
           <ringGeometry args={[2.6, 2.9, 18]} />
-          <meshStandardMaterial color="#d8d264" />
+          <meshStandardMaterial color="#dadada" />
         </mesh>
       ))}
 
@@ -284,7 +289,7 @@ export default function Airport() {
         position={[72, 6.3, -5.7]}
         width={9.5}
         height={1.05}
-        bg="#1e3a5f"
+        bg="#222222"
       />
     </group>
   )

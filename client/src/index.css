@@ -11,7 +11,19 @@ body,
   height: 100%;
   overflow: hidden;
   font-family: system-ui, -apple-system, sans-serif;
-  background: #0a0a12;
+  background: #0c0c0c;
+}
+
+/* Fine static noise over the whole frame — the same paper tooth the world's
+   materials carry, so UI and scene grain as one image. Sits above the canvas
+   and below every HUD element (DOM order does the stacking). */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .hint {
@@ -19,7 +31,7 @@ body,
   right: 16px;
   bottom: 16px;
   color: rgba(255, 255, 255, 0.7);
-  background: rgba(10, 10, 20, 0.5);
+  background: rgba(12, 12, 12, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   padding: 7px 12px;
@@ -36,8 +48,8 @@ body,
   top: 18px;
   transform: translateX(-50%);
   color: rgba(255, 255, 255, 0.92);
-  background: rgba(20, 40, 28, 0.6);
-  border: 1px solid rgba(120, 200, 150, 0.35);
+  background: rgba(24, 24, 24, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 999px;
   padding: 8px 18px;
   font-size: 13px;
@@ -53,7 +65,7 @@ body,
   left: 16px;
   top: 16px;
   color: rgba(255, 255, 255, 0.9);
-  background: rgba(10, 10, 20, 0.5);
+  background: rgba(12, 12, 12, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
   padding: 7px 13px;
@@ -73,7 +85,7 @@ body,
   transform: translateX(-50%);
   text-align: center;
   color: #fff;
-  background: rgba(10, 10, 20, 0.62);
+  background: rgba(12, 12, 12, 0.62);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
   padding: 12px 26px;
@@ -99,7 +111,7 @@ body,
   margin-top: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #a8e6b8;
+  color: #e8e8e8;
 }
 
 .nearby-card .prompt::before {
@@ -108,13 +120,13 @@ body,
 
 /* looking at a resident rather than a door */
 .nearby-card.person {
-  background: rgba(18, 14, 30, 0.66);
-  border-color: rgba(190, 170, 255, 0.35);
+  background: rgba(20, 20, 20, 0.66);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .nearby-card.person .sub {
   opacity: 0.85;
-  color: #d9cdff;
+  color: #d8d8d8;
 }
 
 .enter-overlay {
@@ -126,7 +138,7 @@ body,
   justify-content: center;
   gap: 12px;
   color: #fff;
-  background: rgba(5, 6, 14, 0.45);
+  background: rgba(8, 8, 8, 0.45);
   cursor: pointer;
   user-select: none;
 }

@@ -1,7 +1,9 @@
+import { GRAIN_BUMP, grainTexture } from './grain'
+
 export function Tree({
   position,
   scale = 1,
-  foliage = '#4a7c3f',
+  foliage = '#606060',
 }: {
   position: [number, number, number]
   scale?: number
@@ -11,7 +13,7 @@ export function Tree({
     <group position={position} scale={scale}>
       <mesh position={[0, 0.8, 0]} castShadow>
         <cylinderGeometry args={[0.18, 0.26, 1.6, 7]} />
-        <meshStandardMaterial color="#6b4a2f" />
+        <meshStandardMaterial color="#4f4f4f" />
       </mesh>
       <mesh position={[0, 2.2, 0]} castShadow>
         <sphereGeometry args={[1.25, 10, 8]} />
@@ -36,16 +38,16 @@ export function StreetLight({
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, 2.5, 0]} castShadow>
         <cylinderGeometry args={[0.07, 0.1, 5, 8]} />
-        <meshStandardMaterial color="#3a3f45" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
       {/* arm reaching over the road (+z) */}
       <mesh position={[0, 4.95, 0.7]}>
         <boxGeometry args={[0.09, 0.09, 1.6]} />
-        <meshStandardMaterial color="#3a3f45" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
       <mesh position={[0, 4.85, 1.45]}>
         <boxGeometry args={[0.28, 0.14, 0.55]} />
-        <meshStandardMaterial color="#fff2c0" emissive="#ffe9a0" emissiveIntensity={0.6} />
+        <meshStandardMaterial color="#f4f4f4" emissive="#eaeaea" emissiveIntensity={0.6} />
       </mesh>
     </group>
   )
@@ -71,22 +73,22 @@ export function RoadNetwork() {
         <group key={axis}>
           <mesh position={[0, 0.01, axis]} rotation-x={-Math.PI / 2} receiveShadow>
             <planeGeometry args={[150, ROAD_HALF * 2]} />
-            <meshStandardMaterial color="#3c3c44" />
+            <meshStandardMaterial color="#3a3a3a" bumpMap={grainTexture(40, 2)} bumpScale={GRAIN_BUMP} />
           </mesh>
           <mesh position={[axis, 0.01, 0]} rotation-x={-Math.PI / 2} receiveShadow>
             <planeGeometry args={[ROAD_HALF * 2, 150]} />
-            <meshStandardMaterial color="#3c3c44" />
+            <meshStandardMaterial color="#3a3a3a" bumpMap={grainTexture(2, 40)} bumpScale={GRAIN_BUMP} />
           </mesh>
           {/* sidewalks along horizontal + vertical roads */}
           {[ROAD_HALF + 0.9, -ROAD_HALF - 0.9].map((off) => (
             <group key={off}>
               <mesh position={[0, 0.02, axis + off]} rotation-x={-Math.PI / 2} receiveShadow>
                 <planeGeometry args={[150, 1.8]} />
-                <meshStandardMaterial color="#8e8e94" />
+                <meshStandardMaterial color="#c8c8c8" bumpMap={grainTexture(40, 1)} bumpScale={GRAIN_BUMP} />
               </mesh>
               <mesh position={[axis + off, 0.02, 0]} rotation-x={-Math.PI / 2} receiveShadow>
                 <planeGeometry args={[1.8, 150]} />
-                <meshStandardMaterial color="#8e8e94" />
+                <meshStandardMaterial color="#c8c8c8" bumpMap={grainTexture(1, 40)} bumpScale={GRAIN_BUMP} />
               </mesh>
             </group>
           ))}
@@ -95,7 +97,7 @@ export function RoadNetwork() {
       {dashes.map((d, i) => (
         <mesh key={i} position={d.pos} rotation-x={-Math.PI / 2}>
           <planeGeometry args={d.horizontal ? [1.8, 0.28] : [0.28, 1.8]} />
-          <meshStandardMaterial color="#e8e4d8" />
+          <meshStandardMaterial color="#ececec" />
         </mesh>
       ))}
     </group>

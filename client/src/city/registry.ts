@@ -32,34 +32,34 @@ export const STREETS = {
 
 export const BUILDINGS: BuildingEntry[] = [
   // ---------- Main Street, north side ----------
-  { id: 'main-100', kind: 'house', name: 'Larkspur House', number: 100, street: 'Main Street', position: [-48, 0, -12], rotation: 0, colors: { body: '#e0d0b8', roof: '#7a5a48' } },
-  { id: 'main-102', kind: 'house', name: 'Cedar Cottage', number: 102, street: 'Main Street', position: [-25, 0, -12], rotation: 0, colors: { body: '#cfe0d0', roof: '#5a6b5a' } },
-  { id: 'main-106', kind: 'house', name: 'Rosewood House', number: 106, street: 'Main Street', position: [-14, 0, -12], rotation: 0, colors: { body: '#e8d8b0', roof: '#8c4a3c' } },
+  { id: 'main-100', kind: 'house', name: 'Larkspur House', number: 100, street: 'Main Street', position: [-48, 0, -12], rotation: 0, colors: { body: '#d6d6d6', roof: '#5a5a5a' } },
+  { id: 'main-102', kind: 'house', name: 'Cedar Cottage', number: 102, street: 'Main Street', position: [-25, 0, -12], rotation: 0, colors: { body: '#cfcfcf', roof: '#646464' } },
+  { id: 'main-106', kind: 'house', name: 'Rosewood House', number: 106, street: 'Main Street', position: [-14, 0, -12], rotation: 0, colors: { body: '#dcdcdc', roof: '#4e4e4e' } },
   { id: 'main-112', kind: 'restaurant', name: 'Bluebird Diner', number: 112, street: 'Main Street', position: [16, 0, -12], rotation: 0 },
-  { id: 'main-118', kind: 'office', name: 'Eastview Offices', number: 118, street: 'Main Street', position: [48, 0, -14], rotation: 0, colors: { body: '#93a89b' }, size: { height: 17 } },
+  { id: 'main-118', kind: 'office', name: 'Eastview Offices', number: 118, street: 'Main Street', position: [48, 0, -14], rotation: 0, colors: { body: '#9e9e9e' }, size: { height: 17 } },
   // the airport terminal sits at the east end of Main Street; the airfield itself is scenery (city/airport.ts)
-  { id: 'main-130', kind: 'airport', name: 'Simtown Municipal Airport', number: 130, street: 'Main Street', position: [72, 0, -13], rotation: 0, colors: { body: '#d9dde2', roof: '#5a6b78' }, size: { width: 18, depth: 11, height: 5.4 } },
+  { id: 'main-130', kind: 'airport', name: 'Simtown Municipal Airport', number: 130, street: 'Main Street', position: [72, 0, -13], rotation: 0, colors: { body: '#dadada', roof: '#5e5e5e' }, size: { width: 18, depth: 11, height: 5.4 } },
   // ---------- Main Street, south side ----------
-  { id: 'main-99', kind: 'house', name: 'Aspen Cottage', number: 99, street: 'Main Street', position: [-48, 0, 12], rotation: Math.PI, colors: { body: '#ccdce0', roof: '#4a6a72' } },
-  { id: 'main-101', kind: 'house', name: 'Hazel House', number: 101, street: 'Main Street', position: [-25, 0, 12], rotation: Math.PI, colors: { body: '#ecd8c8', roof: '#8c5a3c' } },
-  { id: 'main-105', kind: 'house', name: 'Bluebell Cottage', number: 105, street: 'Main Street', position: [-14, 0, 12], rotation: Math.PI, colors: { body: '#c8d8ec', roof: '#4a5a78' } },
+  { id: 'main-99', kind: 'house', name: 'Aspen Cottage', number: 99, street: 'Main Street', position: [-48, 0, 12], rotation: Math.PI, colors: { body: '#c8c8c8', roof: '#606060' } },
+  { id: 'main-101', kind: 'house', name: 'Hazel House', number: 101, street: 'Main Street', position: [-25, 0, 12], rotation: Math.PI, colors: { body: '#e0e0e0', roof: '#565656' } },
+  { id: 'main-105', kind: 'house', name: 'Bluebell Cottage', number: 105, street: 'Main Street', position: [-14, 0, 12], rotation: Math.PI, colors: { body: '#d2d2d2', roof: '#525252' } },
   { id: 'main-115', kind: 'gasstation', name: 'Gas & Go', number: 115, street: 'Main Street', position: [17, 0, 13], rotation: Math.PI },
   // ---------- Oak Avenue, south side ----------
-  { id: 'oak-203', kind: 'house', name: 'Juniper House', number: 203, street: 'Oak Avenue', position: [-25, 0, -25], rotation: Math.PI, colors: { body: '#f0e0c8', roof: '#a05a3c' } },
-  { id: 'oak-207', kind: 'house', name: 'Willow House', number: 207, street: 'Oak Avenue', position: [-14, 0, -25], rotation: Math.PI, colors: { body: '#dbc6e0', roof: '#6b5a7a' } },
+  { id: 'oak-203', kind: 'house', name: 'Juniper House', number: 203, street: 'Oak Avenue', position: [-25, 0, -25], rotation: Math.PI, colors: { body: '#e4e4e4', roof: '#606060' } },
+  { id: 'oak-207', kind: 'house', name: 'Willow House', number: 207, street: 'Oak Avenue', position: [-14, 0, -25], rotation: Math.PI, colors: { body: '#cccccc', roof: '#585858' } },
   // ---------- Oak Avenue, north side (downtown) ----------
-  { id: 'oak-202', kind: 'office', name: 'Meridian Offices', number: 202, street: 'Oak Avenue', position: [-24, 0, -48], rotation: 0, colors: { body: '#8fa3b8' }, size: { height: 15 } },
-  { id: 'oak-206', kind: 'office', name: 'Sandstone Tower', number: 206, street: 'Oak Avenue', position: [-11, 0, -48], rotation: 0, colors: { body: '#a89f94' }, size: { height: 21 } },
-  { id: 'oak-210', kind: 'office', name: 'Northgate Tower', number: 210, street: 'Oak Avenue', position: [12, 0, -48], rotation: 0, colors: { body: '#7d8ea0' }, size: { height: 18 } },
-  { id: 'oak-214', kind: 'office', name: 'Lavender Plaza', number: 214, street: 'Oak Avenue', position: [25, 0, -48], rotation: 0, colors: { body: '#b0a8b8' }, size: { height: 13, width: 11 } },
+  { id: 'oak-202', kind: 'office', name: 'Meridian Offices', number: 202, street: 'Oak Avenue', position: [-24, 0, -48], rotation: 0, colors: { body: '#a2a2a2' }, size: { height: 15 } },
+  { id: 'oak-206', kind: 'office', name: 'Sandstone Tower', number: 206, street: 'Oak Avenue', position: [-11, 0, -48], rotation: 0, colors: { body: '#aaaaaa' }, size: { height: 21 } },
+  { id: 'oak-210', kind: 'office', name: 'Northgate Tower', number: 210, street: 'Oak Avenue', position: [12, 0, -48], rotation: 0, colors: { body: '#8e8e8e' }, size: { height: 18 } },
+  { id: 'oak-214', kind: 'office', name: 'Lavender Plaza', number: 214, street: 'Oak Avenue', position: [25, 0, -48], rotation: 0, colors: { body: '#b4b4b4' }, size: { height: 13, width: 11 } },
   // ---------- Maple Avenue, north side ----------
-  { id: 'maple-302', kind: 'house', name: 'Honey House', number: 302, street: 'Maple Avenue', position: [-25, 0, 25], rotation: 0, colors: { body: '#e8ccc0', roof: '#9c4a4a' } },
-  { id: 'maple-306', kind: 'house', name: 'Fern Cottage', number: 306, street: 'Maple Avenue', position: [-14, 0, 25], rotation: 0, colors: { body: '#d8e8c8', roof: '#5a7a4a' } },
+  { id: 'maple-302', kind: 'house', name: 'Honey House', number: 302, street: 'Maple Avenue', position: [-25, 0, 25], rotation: 0, colors: { body: '#d8d8d8', roof: '#5c5c5c' } },
+  { id: 'maple-306', kind: 'house', name: 'Fern Cottage', number: 306, street: 'Maple Avenue', position: [-14, 0, 25], rotation: 0, colors: { body: '#dedede', roof: '#626262' } },
   // ---------- Maple Avenue, south side (shops) ----------
-  { id: 'maple-301', kind: 'shop', name: 'Violet Boutique', number: 301, street: 'Maple Avenue', position: [-20, 0, 45], rotation: Math.PI, colors: { body: '#c9b8d8', awning: '#6c5ce7' } },
-  { id: 'maple-305', kind: 'shop', name: 'Green Grocer', number: 305, street: 'Maple Avenue', position: [-10, 0, 45], rotation: Math.PI, colors: { body: '#b8d8c9', awning: '#00885a' } },
-  { id: 'maple-311', kind: 'shop', name: 'Red Rocket Records', number: 311, street: 'Maple Avenue', position: [13, 0, 45], rotation: Math.PI, colors: { body: '#d8c9b8', awning: '#c0392b' } },
-  { id: 'maple-315', kind: 'shop', name: 'Blue Harbor Books', number: 315, street: 'Maple Avenue', position: [23, 0, 45], rotation: Math.PI, colors: { body: '#b8c9d8', awning: '#2d6cdf' } },
+  { id: 'maple-301', kind: 'shop', name: 'Violet Boutique', number: 301, street: 'Maple Avenue', position: [-20, 0, 45], rotation: Math.PI, colors: { body: '#c6c6c6', awning: '#3e3e3e' } },
+  { id: 'maple-305', kind: 'shop', name: 'Green Grocer', number: 305, street: 'Maple Avenue', position: [-10, 0, 45], rotation: Math.PI, colors: { body: '#cccccc', awning: '#484848' } },
+  { id: 'maple-311', kind: 'shop', name: 'Red Rocket Records', number: 311, street: 'Maple Avenue', position: [13, 0, 45], rotation: Math.PI, colors: { body: '#d0d0d0', awning: '#343434' } },
+  { id: 'maple-315', kind: 'shop', name: 'Blue Harbor Books', number: 315, street: 'Maple Avenue', position: [23, 0, 45], rotation: Math.PI, colors: { body: '#c2c2c2', awning: '#525252' } },
 ]
 
 export function addressOf(b: BuildingEntry): string {

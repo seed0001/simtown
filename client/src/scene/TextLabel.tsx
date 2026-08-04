@@ -32,7 +32,7 @@ export function SignPlate({
   rotation = 0,
   width = 3,
   height = 0.75,
-  bg = '#1e6b3a',
+  bg = '#2a2a2a',
   fg = '#ffffff',
 }: {
   text: string
@@ -56,7 +56,7 @@ export function SignPlate({
   )
 }
 
-/** Green street-name signs crossed on a pole, placed at intersections. */
+/** Street-name signs crossed on a pole, placed at intersections. */
 export function StreetSignPost({
   position,
   ewName,
@@ -70,7 +70,7 @@ export function StreetSignPost({
     <group position={position}>
       <mesh position={[0, 1.75, 0]} castShadow>
         <cylinderGeometry args={[0.06, 0.08, 3.5, 8]} />
-        <meshStandardMaterial color="#3a3f45" />
+        <meshStandardMaterial color="#3c3c3c" />
       </mesh>
       {/* east-west street name faces north/south */}
       <SignPlate text={ewName} position={[0, 3.3, 0]} rotation={0} width={2.6} height={0.55} />
@@ -94,7 +94,7 @@ function useNameTexture(text: string) {
       if (typeof ctx.roundRect === 'function') ctx.roundRect(8, 28, 496, 72, 36)
       else ctx.rect(8, 28, 496, 72)
     }
-    ctx.fillStyle = 'rgba(10, 10, 20, 0.62)'
+    ctx.fillStyle = 'rgba(14, 14, 14, 0.62)'
     box()
     ctx.fill()
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.24)'
@@ -172,8 +172,8 @@ export function AddressPlate({
       rotation={rotation}
       width={0.85}
       height={0.4}
-      bg="#f5f2ea"
-      fg="#2b2b30"
+      bg="#f4f4f4"
+      fg="#2a2a2a"
     />
   )
 }
