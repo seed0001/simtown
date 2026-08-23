@@ -5,7 +5,7 @@
 // SPEC.md §11 says conversation generation is budgeted, not automatic on
 // every crossing. A per-pair cooldown enforces that.
 
-import { nowTownTime, formatTownTime } from '../../../client/src/sim/clock.ts'
+import { nowTownTime, formatTownTime } from '../towndata/sim/clock.ts'
 import { ENCOUNTER_RULES } from './encounters.ts'
 import { getBrain } from '../residents/index.ts'
 import { converse } from './converse.ts'

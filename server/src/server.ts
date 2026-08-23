@@ -6,7 +6,7 @@ import { getBrain, AVAILABLE_RESIDENT_IDS } from './residents/index.ts'
 import { converse } from './social/converse.ts'
 import { ENCOUNTER_RULES } from './social/encounters.ts'
 import { startScheduler } from './social/scheduler.ts'
-import { nowTownTime, formatTownTime } from '../../client/src/sim/clock.ts'
+import { nowTownTime, formatTownTime } from './towndata/sim/clock.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()

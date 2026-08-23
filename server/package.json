@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync-town-data": "node scripts/sync-town-data.mjs"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

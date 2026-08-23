@@ -12,5 +12,5 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": false
   },
-  "include": ["src/**/*", "../client/src/city/**/*", "../client/src/sim/**/*"]
+  "include": ["src/**/*"]
 }

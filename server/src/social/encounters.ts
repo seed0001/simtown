@@ -13,8 +13,8 @@
 // Nothing here invents a reason. Every rule traces back to a fact already in
 // client/src/city/residents.ts.
 
-import { type TownTime } from '../../../client/src/sim/clock.ts'
-import { getResident, isOnShiftAt } from '../../../client/src/city/residents.ts'
+import { type TownTime } from '../towndata/sim/clock.ts'
+import { getResident, isOnShiftAt } from '../towndata/city/residents.ts'
 
 export interface EncounterRule {
   a: string

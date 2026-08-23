@@ -8,9 +8,9 @@ import {
   relationshipsOf,
   isOnShiftAt,
   getResident,
-} from '../../../client/src/city/residents.ts'
-import { addressOf, type BuildingEntry } from '../../../client/src/city/registry.ts'
-import { nowTownTime, formatTownTime, type TownTime } from '../../../client/src/sim/clock.ts'
+} from '../towndata/city/residents.ts'
+import { addressOf, type BuildingEntry } from '../towndata/city/registry.ts'
+import { nowTownTime, formatTownTime, type TownTime } from '../towndata/sim/clock.ts'
 import { chatCompletion, type ChatMessage } from '../openrouter.ts'
 import { EmotionEngine, type EmotionState } from './emotion.ts'
 import { GoalsEngine, type GoalsState } from './goals.ts'
@@ -56,7 +56,7 @@ export class ResidentBrain {
 
   constructor(residentId: string, seedConcerns: string[], statePath: string) {
     const resident = getResident(residentId)
-    if (!resident) throw new Error(`no resident with id ${residentId} in client/src/city/residents.ts`)
+    if (!resident) throw new Error(`no resident with id ${residentId} in towndata/city/residents.ts`)
     this.resident = resident
     this.personality = new PersonalityEngine({ persona: resident.persona, voice: resident.voice })
     this.statePath = statePath
