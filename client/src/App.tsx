@@ -4,6 +4,7 @@ import CityScene from './scene/CityScene'
 import Interior from './scene/Interior'
 import Player, { type Bounds } from './scene/Player'
 import InteractionSystem, { type Mode, type Nearby } from './scene/InteractionSystem'
+import VoiceConversation, { type VoiceState } from './scene/VoiceConversation'
 import { BUILDINGS, addressOf, getBuilding } from './city/registry'
 import { getInterior } from './city/interiors'
 import { RESIDENTS } from './city/residents'
@@ -26,6 +27,7 @@ export default function App() {
   const [locked, setLocked] = useState(false)
   const [mode, setMode] = useState<Mode>({ view: 'city' })
   const [nearby, setNearby] = useState<Nearby | null>(null)
+  const [voice, setVoice] = useState<VoiceState | null>(null)
   const townTime = useTownClockLabel()
 
   const handleEnter = useCallback((id: string, returnPos: [number, number, number]) => {
@@ -68,6 +70,7 @@ export default function App() {
           onEnter={handleEnter}
           onExit={handleExit}
         />
+        <VoiceConversation mode={mode} onStateChange={setVoice} />
       </Canvas>
 
       {/* paper grain over the whole frame; HUD elements below stack above it */}
@@ -91,7 +94,8 @@ export default function App() {
         </div>
       )}
 
-      {locked && nearby && (
+      {/* the voice caption takes over this spot once a conversation with them has actually started */}
+      {locked && nearby && !(nearby.kind === 'person' && voice) && (
         <div className={nearby.kind === 'person' ? 'nearby-card person' : 'nearby-card'}>
           <div className="addr">{nearby.label}</div>
           {nearby.sub && <div className="sub">{nearby.sub}</div>}
@@ -101,8 +105,25 @@ export default function App() {
         </div>
       )}
 
+      {locked && voice && (
+        <div className="voice-caption">
+          <div className="who">
+            {voice.residentName}
+            {voice.status === 'greeting' && ' · walking up'}
+            {voice.status === 'thinking' && ' · thinking'}
+            {voice.status === 'listening' && ' · listening'}
+            {voice.status === 'unavailable' && " · can't talk right now"}
+          </div>
+          {voice.lastLine && (
+            <div className={voice.lastLine.speaker === 'you' ? 'line you' : 'line them'}>
+              {voice.lastLine.text}
+            </div>
+          )}
+        </div>
+      )}
+
       {locked && (
-        <div className="hint">WASD move · Shift sprint · E enter/exit · Esc release cursor</div>
+        <div className="hint">WASD move · Shift sprint · E enter/exit · Esc release cursor · walk up to someone to talk</div>
       )}
     </>
   )
