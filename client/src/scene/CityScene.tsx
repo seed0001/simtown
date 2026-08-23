@@ -3,9 +3,11 @@ import { BUILDINGS, STREETS, doorWorld, type BuildingEntry } from '../city/regis
 import Airport from './Airport'
 import { GasStation, House, OfficeBuilding, Restaurant, Shop, Terminal } from './Buildings'
 import Flights from './Flights'
+import { EzTree, TREE_PRESETS } from './EzTree'
 import { createGroundMaterial } from './groundMaterial'
+import Mountains from './Mountains'
 import { StreetPeople } from './People'
-import { RoadNetwork, StreetLight, Tree } from './Props'
+import { RoadNetwork, StreetLight } from './Props'
 import { AddressPlate, StreetSignPost } from './TextLabel'
 
 const TREES: [number, number, number][] = [
@@ -150,6 +152,8 @@ export default function CityScene() {
 
       <RoadNetwork />
 
+      <Mountains />
+
       <Airport />
       <Flights />
 
@@ -182,11 +186,12 @@ export default function CityScene() {
       )}
 
       {TREES.map((pos, i) => (
-        <Tree
+        <EzTree
           key={i}
           position={pos}
-          scale={0.85 + ((i * 7) % 5) * 0.12}
-          foliage={i % 3 === 0 ? '#3f7a3a' : i % 3 === 1 ? '#5a9c4a' : '#2f6b34'}
+          preset={TREE_PRESETS[i % TREE_PRESETS.length]}
+          seed={2000 + i * 137}
+          scale={(0.8 + ((i * 11) % 6) * 0.09) / 5}
         />
       ))}
 

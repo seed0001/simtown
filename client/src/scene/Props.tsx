@@ -1,32 +1,5 @@
 import { GRAIN_BUMP, grainTexture } from './grain'
 
-export function Tree({
-  position,
-  scale = 1,
-  foliage = '#4a8f3c',
-}: {
-  position: [number, number, number]
-  scale?: number
-  foliage?: string
-}) {
-  return (
-    <group position={position} scale={scale}>
-      <mesh position={[0, 0.8, 0]} castShadow>
-        <cylinderGeometry args={[0.18, 0.26, 1.6, 7]} />
-        <meshStandardMaterial color="#5b3a22" />
-      </mesh>
-      <mesh position={[0, 2.2, 0]} castShadow>
-        <sphereGeometry args={[1.25, 10, 8]} />
-        <meshStandardMaterial color={foliage} flatShading />
-      </mesh>
-      <mesh position={[0.3, 3, 0.2]} castShadow>
-        <sphereGeometry args={[0.8, 9, 7]} />
-        <meshStandardMaterial color={foliage} flatShading />
-      </mesh>
-    </group>
-  )
-}
-
 export function StreetLight({
   position,
   rotation = 0,
