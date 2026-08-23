@@ -11,11 +11,46 @@ import { nowTownTime, formatTownTime } from './towndata/sim/clock.ts'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 
+// the 3D client is a separate Railway service (a different origin), and
+// needs to call this API straight from the browser to hold a conversation —
+// no secrets cross this boundary, just resident replies.
+const ALLOWED_ORIGINS = [
+  'https://simtown-production.up.railway.app',
+  'http://localhost:5173',
+]
+app.use((req, res, next) => {
+  const origin = req.headers.origin
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204)
+  next()
+})
+
 app.use(express.json())
 app.use(express.static(join(__dirname, '..', 'public')))
 
 app.get('/api/residents', (_req, res) => {
   res.json(AVAILABLE_RESIDENT_IDS.map((id) => ({ id, name: getBrain(id).name })))
+})
+
+app.post('/api/greet', async (req, res) => {
+  const { residentId, visitorId } = req.body ?? {}
+  if (typeof residentId !== 'string' || !AVAILABLE_RESIDENT_IDS.includes(residentId)) {
+    return res.status(400).json({ error: `residentId must be one of: ${AVAILABLE_RESIDENT_IDS.join(', ')}` })
+  }
+  if (typeof visitorId !== 'string' || !visitorId.trim()) {
+    return res.status(400).json({ error: 'visitorId is required' })
+  }
+  try {
+    const reply = await getBrain(residentId).greet(visitorId.trim())
+    res.json({ reply })
+  } catch (err) {
+    console.error('[greet] failed:', err)
+    res.status(500).json({ error: err instanceof Error ? err.message : 'unknown error' })
+  }
 })
 
 app.post('/api/chat', async (req, res) => {

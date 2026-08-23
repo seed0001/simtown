@@ -200,6 +200,38 @@ export class ResidentBrain {
     return reply
   }
 
+  /** A human visitor just walked up, before either of them has said anything. */
+  async greet(visitorId: string): Promise<string> {
+    const t = nowTownTime()
+    const systemPrompt = this.buildSystemPrompt(
+      t,
+      { id: visitorId, label: visitorId, isPeer: false },
+      `Someone just walked up to you. Say the first thing — a short, natural greeting given who you actually remember them being, or a stranger's greeting if you don't.`,
+    )
+
+    const priorTurns: ChatMessage[] = this.memory
+      .recentWith(visitorId, 4)
+      .flatMap((e): ChatMessage[] => [
+        { role: 'user', content: e.visitorSaid },
+        { role: 'assistant', content: e.residentSaid },
+      ])
+
+    const messages: ChatMessage[] = [{ role: 'system', content: systemPrompt }, ...priorTurns]
+    const reply = await chatCompletion(messages)
+
+    this.memory.record({
+      atTownTime: formatTownTime(t),
+      atRealMs: Date.now(),
+      visitorId,
+      visitorSaid: '(walked up)',
+      residentSaid: reply,
+    })
+    this.emotion.update({ loneliness: -0.02, boredom: -0.03 })
+    this.persist()
+
+    return reply
+  }
+
   /**
    * Produce this resident's next line in a live conversation with another
    * resident. `transcript` is the shared, neutral record of the exchange so
