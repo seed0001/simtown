@@ -37,12 +37,34 @@ function Building({ b }: { b: BuildingEntry }) {
           rotation={b.rotation}
           bodyColor={b.colors?.body}
           roofColor={b.colors?.roof}
+          width={b.size?.width}
+          depth={b.size?.depth}
+          height={b.size?.height}
+          roofStyle={b.roofStyle}
+          porch={b.features?.porch}
+          dormer={b.features?.dormer}
+          garage={b.features?.garage}
+          secondChimney={b.features?.secondChimney}
         />
       )
     case 'restaurant':
-      return <Restaurant position={b.position} rotation={b.rotation} />
+      return (
+        <Restaurant
+          position={b.position}
+          rotation={b.rotation}
+          color={b.colors?.body}
+          accentColor={b.colors?.accent}
+        />
+      )
     case 'gasstation':
-      return <GasStation position={b.position} rotation={b.rotation} />
+      return (
+        <GasStation
+          position={b.position}
+          rotation={b.rotation}
+          color={b.colors?.body}
+          accentColor={b.colors?.accent}
+        />
+      )
     case 'shop':
       return (
         <Shop
@@ -50,6 +72,9 @@ function Building({ b }: { b: BuildingEntry }) {
           rotation={b.rotation}
           color={b.colors?.body}
           awningColor={b.colors?.awning}
+          width={b.size?.width}
+          depth={b.size?.depth}
+          height={b.size?.height}
         />
       )
     case 'office':
