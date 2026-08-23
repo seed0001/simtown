@@ -136,11 +136,11 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 1240,
     appearance: {
-      skin: '#575757',
-      hair: '#1e1e1e',
+      skin: '#8a5a3c',
+      hair: '#1e1410',
       hairStyle: 'short',
-      shirt: '#efefef', // cook's whites
-      pants: '#3e3e3e',
+      shirt: '#f2efe6', // cook's whites
+      pants: '#33363d',
       shoes: '#262626',
       height: 1.03,
       build: 1.14,
@@ -166,11 +166,11 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 6800,
     appearance: {
-      skin: '#575757',
-      hair: '#202020',
+      skin: '#8a5a3c',
+      hair: '#161010',
       hairStyle: 'bun',
-      shirt: '#8d8d8d',
-      pants: '#323232',
+      shirt: '#a05a8c',
+      pants: '#2f2b3e',
       shoes: '#303030',
       height: 0.98,
       build: 0.95,
@@ -196,11 +196,11 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 980,
     appearance: {
-      skin: '#b9b9b9',
-      hair: '#6e6e6e',
+      skin: '#e8c19c',
+      hair: '#8a5a2c',
       hairStyle: 'short',
-      shirt: '#727272', // grocer's work shirt
-      pants: '#565656',
+      shirt: '#4a8f3c', // grocer's work shirt
+      pants: '#4a4030',
       shoes: '#3c3c3c',
       height: 1.02,
       build: 1.06,
@@ -226,11 +226,11 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 9400,
     appearance: {
-      skin: '#8c8c8c',
-      hair: '#171717',
+      skin: '#c99a6c',
+      hair: '#100a08',
       hairStyle: 'long',
-      shirt: '#333333', // blazer
-      pants: '#262626',
+      shirt: '#2a3a52', // blazer
+      pants: '#22242c',
       shoes: '#222222',
       height: 0.99,
       build: 0.93,
@@ -256,12 +256,12 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 210,
     appearance: {
-      skin: '#414141',
-      hair: '#161616',
+      skin: '#5c3c26',
+      hair: '#0e0a08',
       hairStyle: 'short',
-      shirt: '#565656', // band tee
+      shirt: '#c23b3b', // band tee
       pants: '#2c2c2c',
-      shoes: '#d4d4d4',
+      shoes: '#e0dcd0',
       height: 1.01,
       build: 0.97,
     },
@@ -286,10 +286,10 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 3150,
     appearance: {
-      skin: '#a4a4a4',
-      hair: '#232323',
+      skin: '#d9a878',
+      hair: '#1c140f',
       hairStyle: 'long',
-      shirt: '#4d4d4d', // station polo
+      shirt: '#c23b3b', // station polo
       pants: '#2b2b2b',
       shoes: '#2d2d2d',
       height: 0.97,
@@ -316,11 +316,11 @@ export const RESIDENTS: Resident[] = [
     },
     balance: 14500,
     appearance: {
-      skin: '#cacaca',
-      hair: '#b0b0b0', // gone grey
+      skin: '#e8c19c',
+      hair: '#c9c2b8', // gone grey
       hairStyle: 'thin',
-      shirt: '#6c6c6c', // cardigan
-      pants: '#444444',
+      shirt: '#7a5a8c', // cardigan
+      pants: '#44403a',
       shoes: '#363636',
       height: 0.95,
       build: 1.04,

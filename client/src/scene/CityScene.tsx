@@ -1,8 +1,9 @@
+import { useMemo } from 'react'
 import { BUILDINGS, STREETS, doorWorld, type BuildingEntry } from '../city/registry'
 import Airport from './Airport'
 import { GasStation, House, OfficeBuilding, Restaurant, Shop, Terminal } from './Buildings'
 import Flights from './Flights'
-import { GRAIN_BUMP, grainTexture } from './grain'
+import { createGroundMaterial } from './groundMaterial'
 import { StreetPeople } from './People'
 import { RoadNetwork, StreetLight, Tree } from './Props'
 import { AddressPlate, StreetSignPost } from './TextLabel'
@@ -114,22 +115,24 @@ const PLATE_Y: Record<BuildingEntry['kind'], number> = {
 }
 
 export default function CityScene() {
+  const groundMaterial = useMemo(() => createGroundMaterial(), [])
   return (
     <>
-      {/* environment: a paper-white sky, gray haze, colorless light. Attached
-          at the scene root — inside the group they'd attach to the group and
-          silently do nothing. */}
-      <color attach="background" args={['#e6e6e6']} />
+      {/* environment: a bright day-lit sky and warm sun. Attached at the scene
+          root — inside the group they'd attach to the group and silently do
+          nothing. */}
+      <color attach="background" args={['#8fc6e8']} />
       {/* fog reaches past the airfield now, so the runway is visible from town */}
-      <fog attach="fog" args={['#d8d8d8', 70, 300]} />
+      <fog attach="fog" args={['#bcdcee', 70, 300]} />
     <group>
-      <ambientLight intensity={0.55} />
-      <hemisphereLight args={['#f4f4f4', '#8a8a8a', 0.35]} />
+      <ambientLight intensity={0.55} color="#fff2df" />
+      <hemisphereLight args={['#bfe3fa', '#5c8a45', 0.4]} />
       {/* the shadow frustum has to cover the airport too; the bigger map keeps
           the town's shadows finer than they were before it was widened */}
       <directionalLight
         position={[60, 80, 30]}
         intensity={1.25}
+        color="#fff4d9"
         castShadow
         shadow-mapSize={[4096, 4096]}
         shadow-camera-left={-150}
@@ -141,9 +144,8 @@ export default function CityScene() {
       />
 
       {/* ground */}
-      <mesh rotation-x={-Math.PI / 2} receiveShadow>
+      <mesh rotation-x={-Math.PI / 2} receiveShadow material={groundMaterial}>
         <planeGeometry args={[300, 300]} />
-        <meshStandardMaterial color="#a6a6a6" bumpMap={grainTexture(64)} bumpScale={GRAIN_BUMP} />
       </mesh>
 
       <RoadNetwork />
@@ -184,7 +186,7 @@ export default function CityScene() {
           key={i}
           position={pos}
           scale={0.85 + ((i * 7) % 5) * 0.12}
-          foliage={i % 3 === 0 ? '#6a6a6a' : i % 3 === 1 ? '#565656' : '#7a7a7a'}
+          foliage={i % 3 === 0 ? '#3f7a3a' : i % 3 === 1 ? '#5a9c4a' : '#2f6b34'}
         />
       ))}
 

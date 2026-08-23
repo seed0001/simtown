@@ -30,7 +30,7 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
       {/* ceiling */}
       <mesh rotation-x={Math.PI / 2} position={[0, WALL_H, 0]}>
         <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#ececec" />
+        <meshStandardMaterial color="#f2ede0" />
       </mesh>
 
       {/* back wall */}
@@ -61,7 +61,7 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
       {[-DOOR_W / 2, DOOR_W / 2].map((x) => (
         <mesh key={x} position={[x, 1.35, d / 2]}>
           <boxGeometry args={[0.1, 2.7, 0.26]} />
-          <meshStandardMaterial color="#4a4a4a" />
+          <meshStandardMaterial color="#3a2e22" />
         </mesh>
       ))}
 
@@ -71,7 +71,7 @@ export default function Interior({ id, def }: { id: string; def: InteriorDef }) 
         rotation={Math.PI}
         width={0.9}
         height={0.35}
-        bg="#2a2a2a"
+        bg="#7a1f1f"
       />
 
       {def.items.map((item, i) => (

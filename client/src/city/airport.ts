@@ -115,8 +115,8 @@ export const FLIGHTS: Flight[] = [
     startMinute: 7 * 60 + 40,
     duration: 70,
     days: [1, 2, 3, 4, 5],
-    livery: '#e8e8e8',
-    accent: '#525252',
+    livery: '#f2efe6',
+    accent: '#c23b3b',
   },
   {
     id: 'n9rm',
@@ -126,8 +126,8 @@ export const FLIGHTS: Flight[] = [
     duration: 45,
     days: [1, 3, 5],
     // light enough to read against its own dark canopy head-on
-    livery: '#818181',
-    accent: '#cfcfcf',
+    livery: '#e8d34a',
+    accent: '#333333',
   },
   {
     id: 'n82j',
@@ -136,8 +136,8 @@ export const FLIGHTS: Flight[] = [
     startMinute: 11 * 60 + 15,
     duration: 70,
     days: [0, 2, 4, 6],
-    livery: '#dedede',
-    accent: '#343434',
+    livery: '#a8c8dc',
+    accent: '#1f3a52',
   },
   {
     id: 'n12ct',
@@ -146,8 +146,8 @@ export const FLIGHTS: Flight[] = [
     startMinute: 14 * 60,
     duration: 45,
     days: [0, 6],
-    livery: '#464646',
-    accent: '#e8e8e8',
+    livery: '#3e6b3e',
+    accent: '#f0ece0',
   },
   {
     id: 'n55v',
@@ -156,8 +156,8 @@ export const FLIGHTS: Flight[] = [
     startMinute: 16 * 60 + 20,
     duration: 70,
     days: [0, 1, 3, 5, 6],
-    livery: '#e2e2e2',
-    accent: '#565656',
+    livery: '#f0ece0',
+    accent: '#1f6b6b',
   },
   {
     id: 'n301k',
@@ -166,8 +166,8 @@ export const FLIGHTS: Flight[] = [
     startMinute: 19 * 60 + 5,
     duration: 70,
     days: [2, 4, 6],
-    livery: '#d6d6d6',
-    accent: '#6a6a6a',
+    livery: '#e8722c',
+    accent: '#f2efe6',
   },
 ]
 
