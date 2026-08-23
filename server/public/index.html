@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SimTown Residents</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #1c1c1c;
+    color: #e4e4e4;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 64px;
+  }
+  h1 { font-size: 1.1rem; font-weight: 600; color: #a8a8a8; letter-spacing: 0.02em; margin: 0 0 4px; }
+  h2 { font-size: 0.95rem; font-weight: 600; color: #9a9a9a; margin: 0 0 10px; }
+  .sub { color: #6e6e6e; font-size: 0.85rem; margin-bottom: 20px; text-align: center; }
+  select {
+    background: #2a2a2a; color: #dcdcdc; border: 1px solid #444; border-radius: 6px;
+    padding: 6px 10px; font-size: 0.85rem;
+  }
+  #mic {
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 2px solid #444; background: #2a2a2a; color: #dcdcdc;
+    font-size: 0.95rem; cursor: pointer; transition: all 0.15s ease; margin-top: 20px;
+  }
+  #mic.listening { background: #4a4a4a; border-color: #dcdcdc; box-shadow: 0 0 0 8px rgba(220,220,220,0.08); }
+  #mic.speaking { background: #3a3a3a; border-color: #8a8a8a; }
+  #mic:disabled { opacity: 0.4; cursor: not-allowed; }
+  #status { margin-top: 16px; color: #8a8a8a; font-size: 0.9rem; min-height: 1.2em; }
+  #log {
+    width: 100%; max-width: 560px; margin-top: 28px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .line { padding: 10px 14px; border-radius: 10px; font-size: 0.92rem; line-height: 1.4; max-width: 85%; }
+  .line.visitor { align-self: flex-end; background: #33333c; }
+  .line.resident { align-self: flex-start; background: #2a2a2a; border: 1px solid #3a3a3a; }
+  .line .who { display: block; font-size: 0.7rem; color: #7a7a7a; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+  #state {
+    width: 100%; max-width: 560px; margin-top: 20px; padding: 14px;
+    background: #202020; border: 1px solid #333; border-radius: 8px;
+    font-size: 0.72rem; color: #7a7a7a; white-space: pre-wrap; font-family: ui-monospace, monospace;
+  }
+  #nameBar { margin-bottom: 4px; font-size: 0.85rem; color: #8a8a8a; }
+  #nameBar button { background: none; border: none; color: #9ab; text-decoration: underline; cursor: pointer; font-size: 0.85rem; }
+  section { width: 100%; max-width: 560px; display: flex; flex-direction: column; align-items: center; }
+  hr { width: 100%; max-width: 560px; border: none; border-top: 1px solid #333; margin: 48px 0; }
+  .pair-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  #convergeBtn {
+    background: #2a2a2a; color: #dcdcdc; border: 1px solid #444; border-radius: 6px;
+    padding: 8px 16px; font-size: 0.85rem; cursor: pointer;
+  }
+  #convergeBtn:disabled { opacity: 0.5; cursor: wait; }
+  #convoLog { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+</style>
+</head>
+<body>
+  <h1>SIMTOWN — TALK TO A RESIDENT</h1>
+  <div class="sub">Talk out loud — this is a voice conversation.</div>
+
+  <section>
+    <div class="pair-row">
+      <label for="residentSelect">Speaking with:</label>
+      <select id="residentSelect"></select>
+    </div>
+    <div id="nameBar"></div>
+    <button id="mic">Tap to talk</button>
+    <div id="status">Waiting</div>
+    <div id="log"></div>
+    <div id="state">brain state will appear here after the first exchange</div>
+  </section>
+
+  <hr />
+
+  <section>
+    <h2>Have two residents talk to each other</h2>
+    <div class="pair-row">
+      <select id="pairA"></select>
+      <span style="color:#666">↔</span>
+      <select id="pairB"></select>
+      <button id="convergeBtn">Start conversation</button>
+    </div>
+    <div id="convoLog"></div>
+  </section>
+
+<script>
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+const micBtn = document.getElementById('mic')
+const statusEl = document.getElementById('status')
+const logEl = document.getElementById('log')
+const stateEl = document.getElementById('state')
+const nameBar = document.getElementById('nameBar')
+const residentSelect = document.getElementById('residentSelect')
+const pairA = document.getElementById('pairA')
+const pairB = document.getElementById('pairB')
+const convergeBtn = document.getElementById('convergeBtn')
+const convoLog = document.getElementById('convoLog')
+
+let residents = []
+let residentId = null
+
+async function loadResidents() {
+  const res = await fetch('/api/residents')
+  residents = await res.json()
+  for (const sel of [residentSelect, pairA, pairB]) {
+    sel.innerHTML = residents.map((r) => '<option value="' + r.id + '">' + r.name + '</option>').join('')
+  }
+  residentId = residents[0]?.id
+  if (pairB.options.length > 1) pairB.selectedIndex = 1
+  refreshState()
+}
+
+function residentName(id) {
+  return residents.find((r) => r.id === id)?.name || id
+}
+
+residentSelect.addEventListener('change', () => {
+  residentId = residentSelect.value
+  logEl.innerHTML = ''
+  refreshState()
+})
+
+let visitorId = localStorage.getItem('simtown_visitor_name')
+function renderNameBar() {
+  nameBar.textContent = visitorId ? `Known to residents as "${visitorId}". ` : ''
+  if (visitorId) {
+    const btn = document.createElement('button')
+    btn.textContent = 'not you?'
+    btn.onclick = () => { visitorId = null; localStorage.removeItem('simtown_visitor_name'); renderNameBar() }
+    nameBar.appendChild(btn)
+  }
+}
+renderNameBar()
+
+function ensureVisitorId() {
+  while (!visitorId || !visitorId.trim()) {
+    visitorId = prompt('What should residents call you?') || ''
+  }
+  visitorId = visitorId.trim()
+  localStorage.setItem('simtown_visitor_name', visitorId)
+  renderNameBar()
+}
+
+function addLine(who, text) {
+  const div = document.createElement('div')
+  div.className = 'line ' + who
+  div.innerHTML = '<span class="who">' + (who === 'visitor' ? visitorId : residentName(residentId)) + '</span>' + text
+  logEl.appendChild(div)
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' })
+}
+
+async function refreshState() {
+  if (!residentId) return
+  try {
+    const res = await fetch('/api/state/' + residentId)
+    const data = await res.json()
+    stateEl.textContent = JSON.stringify(data, null, 2)
+  } catch (e) { /* non-fatal */ }
+}
+
+function speak(text) {
+  return new Promise((resolve) => {
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.rate = 1.0
+    utter.onend = resolve
+    utter.onerror = resolve
+    micBtn.classList.add('speaking')
+    speechSynthesis.speak(utter)
+  })
+}
+
+async function sendToResident(message) {
+  addLine('visitor', message)
+  statusEl.textContent = residentName(residentId) + ' is thinking…'
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ residentId, visitorId, message }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'request failed')
+    addLine('resident', data.reply)
+    statusEl.textContent = residentName(residentId) + ' is speaking…'
+    await speak(data.reply)
+  } catch (err) {
+    addLine('resident', '(something went wrong: ' + err.message + ')')
+  } finally {
+    micBtn.classList.remove('speaking')
+    statusEl.textContent = 'Tap the button to talk again'
+    refreshState()
+  }
+}
+
+if (!SpeechRecognition) {
+  statusEl.textContent = 'Your browser does not support voice input — try Chrome.'
+  micBtn.disabled = true
+} else {
+  const recognition = new SpeechRecognition()
+  recognition.continuous = false
+  recognition.interimResults = false
+  recognition.lang = 'en-US'
+
+  let listening = false
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript
+    sendToResident(transcript)
+  }
+  recognition.onerror = (event) => {
+    statusEl.textContent = 'Mic error: ' + event.error + ' — tap to try again'
+  }
+  recognition.onend = () => {
+    listening = false
+    micBtn.classList.remove('listening')
+  }
+
+  micBtn.addEventListener('click', () => {
+    ensureVisitorId()
+    if (listening) {
+      recognition.stop()
+      return
+    }
+    listening = true
+    micBtn.classList.add('listening')
+    statusEl.textContent = 'Listening…'
+    recognition.start()
+  })
+}
+
+convergeBtn.addEventListener('click', async () => {
+  const a = pairA.value
+  const b = pairB.value
+  if (a === b) { alert('Pick two different residents.'); return }
+  convergeBtn.disabled = true
+  convergeBtn.textContent = 'Talking…'
+  convoLog.innerHTML = ''
+  try {
+    const res = await fetch('/api/converse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ a, b, exchanges: 3 }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'request failed')
+    for (const turn of data.transcript) {
+      const div = document.createElement('div')
+      div.className = 'line ' + (turn.speaker === a ? 'visitor' : 'resident')
+      div.innerHTML = '<span class="who">' + residentName(turn.speaker) + '</span>' + turn.text
+      convoLog.appendChild(div)
+    }
+  } catch (err) {
+    convoLog.textContent = 'something went wrong: ' + err.message
+  } finally {
+    convergeBtn.disabled = false
+    convergeBtn.textContent = 'Start conversation'
+  }
+})
+
+loadResidents()
+</script>
+</body>
+</html>
