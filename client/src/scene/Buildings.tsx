@@ -6,6 +6,7 @@
 // glows faintly gold against whatever the walls are doing.
 
 import { GRAIN_BUMP, grainTexture } from './grain'
+import { roofWeathering, wallWeathering } from './weatheredMaterial'
 
 type BuildingProps = {
   position: [number, number, number]
@@ -53,13 +54,18 @@ export function House({
       {/* body */}
       <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={bodyColor} bumpMap={grainTexture(5)} bumpScale={GRAIN_BUMP} />
+        <meshStandardMaterial
+          color={bodyColor}
+          bumpMap={grainTexture(5)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
       </mesh>
 
       {roofStyle === 'pyramid' && (
         <mesh position={[0, height + roofRise / 2, 0]} rotation-y={Math.PI / 4} castShadow>
           <coneGeometry args={[Math.hypot(halfW, halfD) * 1.12, roofRise, 4]} />
-          <meshStandardMaterial color={roofColor} flatShading />
+          <meshStandardMaterial color={roofColor} flatShading onBeforeCompile={roofWeathering} />
         </mesh>
       )}
       {roofStyle === 'gabled' &&
@@ -70,7 +76,7 @@ export function House({
           return (
             <mesh key={s} position={[0, height + roofRise / 2, (s * span) / 2]} rotation-x={s * angle} castShadow>
               <boxGeometry args={[width + 0.6, 0.15, slant]} />
-              <meshStandardMaterial color={roofColor} flatShading />
+              <meshStandardMaterial color={roofColor} flatShading onBeforeCompile={roofWeathering} />
             </mesh>
           )
         })}
@@ -82,14 +88,14 @@ export function House({
           return (
             <mesh position={[0, height + roofRise / 2, 0]} rotation-x={angle} castShadow>
               <boxGeometry args={[width + 0.6, 0.15, slant]} />
-              <meshStandardMaterial color={roofColor} flatShading />
+              <meshStandardMaterial color={roofColor} flatShading onBeforeCompile={roofWeathering} />
             </mesh>
           )
         })()}
       {roofStyle === 'flat' && (
         <mesh position={[0, height + 0.15, 0]} castShadow>
           <boxGeometry args={[width + 0.4, 0.3, depth + 0.4]} />
-          <meshStandardMaterial color={roofColor} />
+          <meshStandardMaterial color={roofColor} onBeforeCompile={roofWeathering} />
         </mesh>
       )}
 
@@ -154,11 +160,16 @@ export function House({
             <group>
               <mesh position={[gX, gH / 2, -0.2]} castShadow receiveShadow>
                 <boxGeometry args={[gW, gH, gD]} />
-                <meshStandardMaterial color={bodyColor} bumpMap={grainTexture(4)} bumpScale={GRAIN_BUMP} />
+                <meshStandardMaterial
+                  color={bodyColor}
+                  bumpMap={grainTexture(4)}
+                  bumpScale={GRAIN_BUMP}
+                  onBeforeCompile={wallWeathering}
+                />
               </mesh>
               <mesh position={[gX, gH + 0.1, -0.2]} castShadow>
                 <boxGeometry args={[gW + 0.2, 0.2, gD + 0.2]} />
-                <meshStandardMaterial color={roofColor} />
+                <meshStandardMaterial color={roofColor} onBeforeCompile={roofWeathering} />
               </mesh>
               <mesh position={[gX, gH * 0.4, -0.2 + gD / 2 + 0.01]}>
                 <boxGeometry args={[gW - 0.4, gH - 0.5, 0.06]} />
@@ -200,12 +211,17 @@ export function Restaurant({
       {/* body */}
       <mesh position={[0, 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[14, 4, 10]} />
-        <meshStandardMaterial color={color} bumpMap={grainTexture(8)} bumpScale={GRAIN_BUMP} />
+        <meshStandardMaterial
+          color={color}
+          bumpMap={grainTexture(8)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
       </mesh>
       {/* parapet */}
       <mesh position={[0, 4.2, 0]} castShadow>
         <boxGeometry args={[14.4, 0.4, 10.4]} />
-        <meshStandardMaterial color={accentColor} />
+        <meshStandardMaterial color={accentColor} onBeforeCompile={roofWeathering} />
       </mesh>
       {/* striped awning */}
       {[-5, -3, -1, 1, 3, 5].map((x, i) => (
@@ -261,7 +277,7 @@ export function GasStation({
       {/* canopy */}
       <mesh position={[0, 5, 1.5]} castShadow>
         <boxGeometry args={[12, 0.5, 8]} />
-        <meshStandardMaterial color="#f2f2ec" />
+        <meshStandardMaterial color="#f2f2ec" onBeforeCompile={roofWeathering} />
       </mesh>
       {/* red fascia stripe on canopy front */}
       <mesh position={[0, 5, 5.55]}>
@@ -296,7 +312,12 @@ export function GasStation({
       {/* shop */}
       <mesh position={[0, 1.75, -4.8]} castShadow receiveShadow>
         <boxGeometry args={[9, 3.5, 5]} />
-        <meshStandardMaterial color={color} bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} />
+        <meshStandardMaterial
+          color={color}
+          bumpMap={grainTexture(6)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
       </mesh>
       <mesh position={[0, 1.6, -2.26]}>
         <boxGeometry args={[6, 1.8, 0.08]} />
@@ -336,11 +357,16 @@ export function Shop({
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} />
+        <meshStandardMaterial
+          color={color}
+          bumpMap={grainTexture(6)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
       </mesh>
       <mesh position={[0, height + 0.2, 0]} castShadow>
         <boxGeometry args={[width + 0.4, 0.4, depth + 0.4]} />
-        <meshStandardMaterial color="#7a6a52" />
+        <meshStandardMaterial color="#7a6a52" onBeforeCompile={roofWeathering} />
       </mesh>
       <mesh position={[0, height - 0.5, halfD + 0.6]} rotation-x={0.35}>
         <boxGeometry args={[width - 1, 0.12, 1.5]} />
@@ -383,12 +409,17 @@ export function Terminal({
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} bumpMap={grainTexture(8)} bumpScale={GRAIN_BUMP} />
+        <meshStandardMaterial
+          color={color}
+          bumpMap={grainTexture(8)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
       </mesh>
       {/* flat roof with an overhanging canopy on the landside */}
       <mesh position={[0, height + 0.2, 0.6]} castShadow>
         <boxGeometry args={[width + 1.2, 0.4, depth + 2.4]} />
-        <meshStandardMaterial color={roofColor} />
+        <meshStandardMaterial color={roofColor} onBeforeCompile={roofWeathering} />
       </mesh>
       {/* canopy posts */}
       {[-1, 1].map((s) => (
@@ -445,12 +476,17 @@ export function OfficeBuilding({
     <group position={position} rotation-y={rotation}>
       <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} bumpMap={grainTexture(6, 10)} bumpScale={GRAIN_BUMP} />
+        <meshStandardMaterial
+          color={color}
+          bumpMap={grainTexture(6, 10)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
       </mesh>
       {/* roof lip + rooftop unit */}
       <mesh position={[0, height + 0.15, 0]}>
         <boxGeometry args={[width + 0.4, 0.3, depth + 0.4]} />
-        <meshStandardMaterial color="#4a5a66" />
+        <meshStandardMaterial color="#4a5a66" onBeforeCompile={roofWeathering} />
       </mesh>
       <mesh position={[width / 6, height + 0.8, -depth / 6]} castShadow>
         <boxGeometry args={[2, 1.2, 1.6]} />

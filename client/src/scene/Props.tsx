@@ -1,4 +1,5 @@
 import { GRAIN_BUMP, grainTexture } from './grain'
+import { roadWeathering, sidewalkWeathering } from './weatheredMaterial'
 
 export function StreetLight({
   position,
@@ -46,22 +47,42 @@ export function RoadNetwork() {
         <group key={axis}>
           <mesh position={[0, 0.01, axis]} rotation-x={-Math.PI / 2} receiveShadow>
             <planeGeometry args={[150, ROAD_HALF * 2]} />
-            <meshStandardMaterial color="#33363d" bumpMap={grainTexture(40, 2)} bumpScale={GRAIN_BUMP} />
+            <meshStandardMaterial
+              color="#33363d"
+              bumpMap={grainTexture(40, 2)}
+              bumpScale={GRAIN_BUMP}
+              onBeforeCompile={roadWeathering}
+            />
           </mesh>
           <mesh position={[axis, 0.01, 0]} rotation-x={-Math.PI / 2} receiveShadow>
             <planeGeometry args={[ROAD_HALF * 2, 150]} />
-            <meshStandardMaterial color="#33363d" bumpMap={grainTexture(2, 40)} bumpScale={GRAIN_BUMP} />
+            <meshStandardMaterial
+              color="#33363d"
+              bumpMap={grainTexture(2, 40)}
+              bumpScale={GRAIN_BUMP}
+              onBeforeCompile={roadWeathering}
+            />
           </mesh>
           {/* sidewalks along horizontal + vertical roads */}
           {[ROAD_HALF + 0.9, -ROAD_HALF - 0.9].map((off) => (
             <group key={off}>
               <mesh position={[0, 0.02, axis + off]} rotation-x={-Math.PI / 2} receiveShadow>
                 <planeGeometry args={[150, 1.8]} />
-                <meshStandardMaterial color="#c9c2ac" bumpMap={grainTexture(40, 1)} bumpScale={GRAIN_BUMP} />
+                <meshStandardMaterial
+                  color="#c9c2ac"
+                  bumpMap={grainTexture(40, 1)}
+                  bumpScale={GRAIN_BUMP}
+                  onBeforeCompile={sidewalkWeathering}
+                />
               </mesh>
               <mesh position={[axis + off, 0.02, 0]} rotation-x={-Math.PI / 2} receiveShadow>
                 <planeGeometry args={[1.8, 150]} />
-                <meshStandardMaterial color="#c9c2ac" bumpMap={grainTexture(1, 40)} bumpScale={GRAIN_BUMP} />
+                <meshStandardMaterial
+                  color="#c9c2ac"
+                  bumpMap={grainTexture(1, 40)}
+                  bumpScale={GRAIN_BUMP}
+                  onBeforeCompile={sidewalkWeathering}
+                />
               </mesh>
             </group>
           ))}
