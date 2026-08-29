@@ -185,13 +185,14 @@ The existing town (10 houses, 4 shops, diner, gas station, 5 offices,
   gets off the aircraft. It is the obvious arrival point for the
   travelers in §5 once they exist.
 - **School — built.** Simtown Public School sits on the south edge of
-  town at 1 Central Boulevard, a big K–12 block with one classroom per
-  grade. Unlike other buildings it has no 3D interior: its door opens a
-  separate website (`client/public/school/`) — a directory hub plus a
-  page per classroom. The rooms stand empty for now (the town launches
-  childless); this is the first address to use the generic `link` field
-  on a building, the intended pattern for turning any address into its
-  own site.
+  town at 1 Central Boulevard, a big K–12 block. Walk in the front door
+  and you're in a long hallway; a classroom for every grade (K–12) opens
+  off it, each its own 3D room reached by pressing E at its door. This is
+  the first multi-room interior — `InteriorDef` gained `portals` (doors
+  to other interiors) and interior navigation became a return-stack
+  (`ReturnFrame[]`) so exiting a classroom drops you back in the hallway
+  and exiting the hallway drops you back on the street. Rooms stand empty
+  for now (the town launches childless).
 
 ## 11. Cost Controls (credits are a first-class constraint)
 

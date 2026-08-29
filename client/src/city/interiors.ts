@@ -20,6 +20,7 @@ export type FurnitureType =
   | 'desk'
   | 'bench'
   | 'elevator'
+  | 'board'
 
 export interface FurnitureItem {
   type: FurnitureType
@@ -29,12 +30,28 @@ export interface FurnitureItem {
   size?: number // length for counters/shelves/desks, radius for rugs
 }
 
+/**
+ * A door inside an interior that leads to another interior (not the street).
+ * It sits on a side wall; the player presses E to step through. Used to string
+ * the school hallway together with its classrooms.
+ */
+export interface InteriorPortal {
+  toId: string // interior id in INTERIORS
+  label: string // shown on the look-at card and the sign above the door
+  wall: 'left' | 'right' // -x wall or +x wall
+  z: number // position along the corridor
+}
+
 export interface InteriorDef {
   width: number // x extent
   depth: number // z extent
   floorColor: string
   wallColor: string
   items: FurnitureItem[]
+  // optional: a display name for the HUD when the interior isn't a street building
+  name?: string
+  // optional: doors to other interiors, along the side walls
+  portals?: InteriorPortal[]
 }
 
 // ---------- layout helpers (defaults per building kind) ----------
@@ -188,6 +205,92 @@ function terminalInterior(): InteriorDef {
   }
 }
 
+// ---------- the school: a hallway interior that opens into one classroom per grade ----------
+
+const GRADES: { key: string; label: string; teacher: string; board: string; palette: { floor: string; wall: string; accent: string } }[] = [
+  { key: 'K',  label: 'Kindergarten', teacher: 'Ms. Opal Waverly',      board: 'letters · numbers to 20 · the weather calendar', palette: { floor: '#d9b98a', wall: '#fbeede', accent: '#f4a259' } },
+  { key: '1',  label: 'Grade 1',      teacher: 'Mr. Dale Prentiss',     board: 'short vowels · adding within 20 · printing',      palette: { floor: '#d7c49a', wall: '#fbf1df', accent: '#f4c95d' } },
+  { key: '2',  label: 'Grade 2',      teacher: 'Ms. Cora Ellison',      board: 'place value · telling time · life cycles',        palette: { floor: '#c9c9a6', wall: '#f2f4e6', accent: '#88c9a1' } },
+  { key: '3',  label: 'Grade 3',      teacher: 'Mr. Wendell Hart',      board: 'multiplication · cursive · the solar system',     palette: { floor: '#b8c9c4', wall: '#e9f2ef', accent: '#5fb0b7' } },
+  { key: '4',  label: 'Grade 4',      teacher: 'Ms. Priya Ramanan',     board: 'long division · fractions · the water cycle',     palette: { floor: '#b2c0d2', wall: '#e6ecf4', accent: '#5d8dc9' } },
+  { key: '5',  label: 'Grade 5',      teacher: 'Mr. Julius Boone',      board: 'decimals · essay structure · ecosystems',         palette: { floor: '#bdb6d2', wall: '#ece9f4', accent: '#7b6cc9' } },
+  { key: '6',  label: 'Grade 6',      teacher: 'Ms. Harriet Nkemelu',   board: 'ratios & rates · ancient civilizations',          palette: { floor: '#c9b6cc', wall: '#f1e9f2', accent: '#b56cc9' } },
+  { key: '7',  label: 'Grade 7',      teacher: 'Mr. Sasha Vetrov',      board: 'proportions · cells · world geography',           palette: { floor: '#ccb6c2', wall: '#f2e9ee', accent: '#c96c9a' } },
+  { key: '8',  label: 'Grade 8',      teacher: 'Ms. Delphine Marchetti', board: 'linear equations · chemistry basics · civics',    palette: { floor: '#ccb6b6', wall: '#f2e9e9', accent: '#c96c6c' } },
+  { key: '9',  label: 'Grade 9',      teacher: 'Mr. Amos Fairbank',     board: 'Algebra I · biology · world literature',          palette: { floor: '#d2c0b2', wall: '#f4ece6', accent: '#d98d5d' } },
+  { key: '10', label: 'Grade 10',     teacher: 'Ms. Rosalind Achebe',   board: 'geometry · chemistry · modern history',           palette: { floor: '#cec9a6', wall: '#f2f0e0', accent: '#c9b45d' } },
+  { key: '11', label: 'Grade 11',     teacher: 'Mr. Ferdinand Klose',   board: 'Algebra II · physics · American literature',      palette: { floor: '#bcd2b6', wall: '#e9f2e6', accent: '#7fbf7f' } },
+  { key: '12', label: 'Grade 12',     teacher: 'Ms. Ingrid Solberg',    board: 'pre-calculus · government & economics · capstone', palette: { floor: '#b6ccd6', wall: '#e6eef2', accent: '#5db1d9' } },
+]
+
+function classroomInterior(g: (typeof GRADES)[number]): InteriorDef {
+  const W = 12
+  const D = 11
+  const items: FurnitureItem[] = [
+    // chalkboard + teacher's desk against the back wall
+    { type: 'board', position: [0.6, -D / 2 + 0.35], color: '#2f5d3a' },
+    { type: 'desk', position: [-3.6, -D / 2 + 1.9], size: 2.2, color: '#6b4a30' },
+    { type: 'chair', position: [-3.6, -D / 2 + 2.9], rotation: Math.PI, color: g.palette.accent },
+    // reading / activity corner, front-right
+    { type: 'rug', position: [3.5, 2.6], size: 1.9, color: g.palette.accent },
+    { type: 'shelf', position: [5.3, 2.6], size: 3, rotation: Math.PI / 2 },
+    { type: 'plant', position: [-5.2, 3.9] },
+    { type: 'plant', position: [5.3, -3.8] },
+  ]
+  // student desks: three rows of three, facing the board
+  const isLittle = g.key === 'K' || g.key === '1'
+  const rows = isLittle ? 2 : 3
+  for (let r = 0; r < rows; r++) {
+    for (let c = -1; c <= 1; c++) {
+      const x = c * 2.4
+      const z = -1 + r * 2.1
+      items.push({ type: 'table', position: [x, z] })
+      items.push({ type: 'chair', position: [x, z + 0.85], rotation: Math.PI, color: isLittle ? g.palette.accent : '#6b4a30' })
+    }
+  }
+  return {
+    width: W,
+    depth: D,
+    floorColor: g.palette.floor,
+    wallColor: g.palette.wall,
+    name: `${g.label} Classroom`,
+    items,
+  }
+}
+
+function schoolHallInterior(): InteriorDef {
+  const W = 6
+  const D = 48
+  const left = ['K', '1', '2', '3', '4', '5', '6']
+  const right = ['7', '8', '9', '10', '11', '12']
+  const portals: InteriorPortal[] = []
+  left.forEach((key, i) => {
+    const g = GRADES.find((x) => x.key === key)!
+    portals.push({ toId: `central-1/${key}`, label: `${g.label} · ${g.teacher}`, wall: 'left', z: 19 - i * 6 })
+  })
+  right.forEach((key, i) => {
+    const g = GRADES.find((x) => x.key === key)!
+    portals.push({ toId: `central-1/${key}`, label: `${g.label} · ${g.teacher}`, wall: 'right', z: 16 - i * 6 })
+  })
+  return {
+    width: W,
+    depth: D,
+    floorColor: '#d3ccbc',
+    wallColor: '#e9e4d4',
+    name: 'Simtown Public School',
+    items: [
+      { type: 'bench', position: [-1.7, 20], rotation: Math.PI / 2, color: '#3a5d8a' },
+      { type: 'bench', position: [1.7, 20], rotation: -Math.PI / 2, color: '#3a5d8a' },
+      { type: 'plant', position: [-2, 21.6] },
+      { type: 'plant', position: [2, 21.6] },
+      { type: 'plant', position: [-2, -21] },
+      { type: 'plant', position: [2, -21] },
+      { type: 'board', position: [0, -23.4], color: '#7a2020' },
+    ],
+    portals,
+  }
+}
+
 // ---------- the index: building id -> its dedicated interior map ----------
 
 export const INTERIORS: Record<string, InteriorDef> = {
@@ -219,6 +322,9 @@ export const INTERIORS: Record<string, InteriorDef> = {
   'oak-206': officeLobbyInterior({ accent: '#a8895e' }),
   'oak-210': officeLobbyInterior({ accent: '#4a5c68' }),
   'oak-214': officeLobbyInterior({ accent: '#8a76a0' }),
+  // the school: a hallway plus one classroom per grade, reached through it
+  'central-1': schoolHallInterior(),
+  ...Object.fromEntries(GRADES.map((g) => [`central-1/${g.key}`, classroomInterior(g)])),
 }
 
 const FALLBACK = houseInterior()

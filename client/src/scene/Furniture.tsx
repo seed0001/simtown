@@ -266,6 +266,29 @@ function Desk({ color = '#8a6a48', size = 4 }: { color?: string; size?: number }
   )
 }
 
+/** A wall-mounted board — chalkboard in a classroom, notice board in the hall. */
+function Board({ color = '#2f5d3a' }: { color?: string }) {
+  return (
+    <group>
+      {/* frame */}
+      <mesh position={[0, 1.55, 0]} castShadow>
+        <boxGeometry args={[3.4, 1.5, 0.12]} />
+        <meshStandardMaterial color="#7a5230" />
+      </mesh>
+      {/* surface */}
+      <mesh position={[0, 1.55, 0.08]}>
+        <boxGeometry args={[3.1, 1.24, 0.04]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+      {/* chalk tray */}
+      <mesh position={[0, 0.83, 0.12]}>
+        <boxGeometry args={[3.1, 0.06, 0.16]} />
+        <meshStandardMaterial color="#8a6a48" />
+      </mesh>
+    </group>
+  )
+}
+
 function Elevator() {
   return (
     <group>
@@ -300,6 +323,7 @@ export function Furniture({ item }: { item: FurnitureItem }) {
       case 'tv': return <Tv />
       case 'desk': return <Desk color={item.color} size={item.size} />
       case 'elevator': return <Elevator />
+      case 'board': return <Board color={item.color} />
     }
   })()
   return (

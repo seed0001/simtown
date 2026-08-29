@@ -17,8 +17,6 @@ export interface BuildingEntry {
   rotation: number // radians around Y; buildings face +z in local space
   colors?: { body?: string; roof?: string; awning?: string; accent?: string }
   size?: { width?: number; depth?: number; height?: number }
-  // if set, the door opens this URL (a separate website) instead of a 3D interior
-  link?: string
   // house-only: roof shape and small attached details
   roofStyle?: RoofStyle
   features?: { porch?: boolean; dormer?: boolean; garage?: boolean; secondChimney?: boolean }
@@ -68,9 +66,9 @@ export const BUILDINGS: BuildingEntry[] = [
   { id: 'maple-311', kind: 'shop', name: 'Red Rocket Records', number: 311, street: 'Maple Avenue', position: [13, 0, 45], rotation: Math.PI, colors: { body: '#c23b3b', awning: '#3a1414' } },
   { id: 'maple-315', kind: 'shop', name: 'Blue Harbor Books', number: 315, street: 'Maple Avenue', position: [23, 0, 45], rotation: Math.PI, colors: { body: '#3a6ea5', awning: '#22344a' } },
   // ---------- south of Maple Avenue: the school grounds ----------
-  // big K–12 school on the south edge of town, one classroom per grade.
-  // its door links out to a separate website (client/public/school/).
-  { id: 'central-1', kind: 'school', name: 'Simtown Public School', number: 1, street: 'Central Boulevard', position: [0, 0, 64], rotation: Math.PI, colors: { body: '#c96f4a', roof: '#6f4a33', accent: '#e8dcc4' }, size: { width: 42, depth: 16, height: 9 }, link: '/school/index.html' },
+  // big K–12 school on the south edge of town. Walk in the front door to a
+  // hallway; each classroom opens off it (interiors.ts: 'central-1' + children).
+  { id: 'central-1', kind: 'school', name: 'Simtown Public School', number: 1, street: 'Central Boulevard', position: [0, 0, 64], rotation: Math.PI, colors: { body: '#c96f4a', roof: '#6f4a33', accent: '#e8dcc4' }, size: { width: 42, depth: 16, height: 9 } },
 ]
 
 export function addressOf(b: BuildingEntry): string {

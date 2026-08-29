@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import CityScene from './scene/CityScene'
 import Interior from './scene/Interior'
 import Player, { type Bounds } from './scene/Player'
-import InteractionSystem, { type Mode, type Nearby } from './scene/InteractionSystem'
+import InteractionSystem, { type Mode, type Nearby, type ReturnFrame } from './scene/InteractionSystem'
 import VoiceConversation, { type VoiceState } from './scene/VoiceConversation'
 import { BUILDINGS, addressOf, getBuilding } from './city/registry'
 import { getInterior } from './city/interiors'
@@ -30,14 +30,29 @@ export default function App() {
   const [voice, setVoice] = useState<VoiceState | null>(null)
   const townTime = useTownClockLabel()
 
-  const handleEnter = useCallback((id: string, returnPos: [number, number, number]) => {
-    setMode({ view: 'interior', id, returnPos })
+  const handleEnter = useCallback((toId: string, from: ReturnFrame) => {
+    setMode((m) => ({
+      view: 'interior',
+      id: toId,
+      stack: [...(m.view === 'interior' ? m.stack : []), from],
+    }))
   }, [])
   const handleExit = useCallback(() => {
-    setMode({ view: 'city' })
+    setMode((m) => {
+      if (m.view !== 'interior') return { view: 'city' }
+      const frame = m.stack[m.stack.length - 1]
+      const rest = m.stack.slice(0, -1)
+      return frame?.id ? { view: 'interior', id: frame.id, stack: rest } : { view: 'city' }
+    })
   }, [])
 
   const insideBuilding = mode.view === 'interior' ? getBuilding(mode.id) : null
+  const insideName =
+    mode.view === 'interior'
+      ? insideBuilding
+        ? `${addressOf(insideBuilding)} · ${insideBuilding.name}`
+        : (getInterior(mode.id).name ?? 'a building')
+      : null
   const bounds: Bounds =
     mode.view === 'interior'
       ? (() => {
@@ -88,11 +103,7 @@ export default function App() {
 
       {locked && <div className="clock">{townTime}</div>}
 
-      {locked && insideBuilding && (
-        <div className="chip">
-          Inside {addressOf(insideBuilding)} · {insideBuilding.name}
-        </div>
-      )}
+      {locked && insideName && <div className="chip">Inside {insideName}</div>}
 
       {/* the voice caption takes over this spot once a conversation with them has actually started */}
       {locked && nearby && !(nearby.kind === 'person' && voice) && (

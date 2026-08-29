@@ -114,6 +114,7 @@ const FOOTPRINT: Record<FurnitureType, number> = {
   desk: 0.7,
   bench: 0.8,
   elevator: 0.8,
+  board: 0.3,
 }
 
 function footprintOf(item: FurnitureItem): number {

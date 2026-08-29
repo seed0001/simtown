@@ -6,9 +6,19 @@ import { RESIDENTS, fullName } from '../city/residents'
 import { nowTownTime } from '../sim/clock'
 import { describePresence, indoorPositionOf, outdoorPositionOf } from '../sim/presence'
 
+/**
+ * Where 'exit' from the current interior lands you. `id: null` means the street;
+ * a string is another interior (the school hallway, when you're in a classroom).
+ * `pos` is the camera position to restore in that space.
+ */
+export interface ReturnFrame {
+  id: string | null
+  pos: [number, number, number]
+}
+
 export type Mode =
   | { view: 'city' }
-  | { view: 'interior'; id: string; returnPos: [number, number, number] }
+  | { view: 'interior'; id: string; stack: ReturnFrame[] }
 
 export interface Nearby {
   id: string
@@ -16,6 +26,8 @@ export interface Nearby {
   sub?: string
   canAct: boolean
   action: 'enter' | 'exit'
+  /** set when this door leads to another interior (a classroom off the hallway) */
+  toId?: string
   /** people take priority over doors, and can't be acted on yet */
   kind: 'door' | 'person'
 }
@@ -27,6 +39,11 @@ const ENTER_DIST = 3.4 // allow entering
 const EXIT_DIST = 2.6
 const PERSON_DIST = 4.5 // show who someone is when this close
 
+/** World-local trigger point just inside an interior portal door. */
+function portalPoint(def: { width: number }, wall: 'left' | 'right'): number {
+  return (wall === 'left' ? -1 : 1) * (def.width / 2 - 0.7)
+}
+
 export default function InteractionSystem({
   mode,
   setNearby,
@@ -35,7 +52,8 @@ export default function InteractionSystem({
 }: {
   mode: Mode
   setNearby: (n: Nearby | null) => void
-  onEnter: (id: string, returnPos: [number, number, number]) => void
+  /** step into `toId`, remembering where we came from to return to */
+  onEnter: (toId: string, from: ReturnFrame) => void
   onExit: () => void
 }) {
   const camera = useThree((s) => s.camera)
@@ -76,14 +94,33 @@ export default function InteractionSystem({
       }
     } else {
       const def = getInterior(mode.id)
-      const d = Math.hypot(px, pz - def.depth / 2)
-      if (d < EXIT_DIST) {
+      let bestD = Infinity
+      // the way out, centered on the +z wall
+      const dExit = Math.hypot(px, pz - def.depth / 2)
+      if (dExit < NOTICE_DIST) {
+        const toStreet = (mode.stack[mode.stack.length - 1]?.id ?? null) === null
         next = {
           id: mode.id,
-          label: 'Leave building',
-          canAct: true,
+          label: toStreet ? 'Leave building' : 'Back to the hallway',
+          canAct: dExit < EXIT_DIST,
           action: 'exit',
           kind: 'door',
+        }
+        bestD = dExit
+      }
+      // classroom doors along the hallway walls
+      for (const p of def.portals ?? []) {
+        const d = Math.hypot(px - portalPoint(def, p.wall), pz - p.z)
+        if (d < NOTICE_DIST && d < bestD) {
+          bestD = d
+          next = {
+            id: p.toId,
+            label: p.label,
+            canAct: d < ENTER_DIST,
+            action: 'enter',
+            toId: p.toId,
+            kind: 'door',
+          }
         }
       }
     }
@@ -141,32 +178,33 @@ export default function InteractionSystem({
       const nearby = doorRef.current
       const m = modeRef.current
       if (!nearby?.canAct) return
+      const here: [number, number, number] = [camera.position.x, camera.position.y, camera.position.z]
 
-      if (m.view === 'city' && nearby.action === 'enter') {
-        // some addresses are their own website — open it and stay put in town
-        const linked = BUILDINGS.find((x) => x.id === nearby.id)?.link
-        if (linked) {
-          window.open(linked, '_blank', 'noopener')
-          return
-        }
-        const returnPos: [number, number, number] = [
-          camera.position.x,
-          camera.position.y,
-          camera.position.z,
-        ]
-        const def = getInterior(nearby.id)
+      const stepInto = (toId: string, fromId: string | null) => {
+        const def = getInterior(toId)
         // spawn just inside the door, facing into the room
         camera.position.set(0, 1.7, def.depth / 2 - 1.6)
         camera.rotation.set(0, 0, 0)
         nearbyRef.current = null
         doorRef.current = null
         setNearby(null)
-        onEnter(nearby.id, returnPos)
+        onEnter(toId, { id: fromId, pos: here })
+      }
+
+      if (m.view === 'city' && nearby.action === 'enter') {
+        stepInto(nearby.id, null)
+      } else if (m.view === 'interior' && nearby.action === 'enter' && nearby.toId) {
+        stepInto(nearby.toId, m.id)
       } else if (m.view === 'interior' && nearby.action === 'exit') {
-        const b = BUILDINGS.find((x) => x.id === m.id)
-        camera.position.set(...m.returnPos)
-        // face away from the door on the way out
-        camera.rotation.set(0, (b?.rotation ?? 0) + Math.PI, 0)
+        const frame = m.stack[m.stack.length - 1]
+        camera.position.set(...frame.pos)
+        if (frame.id === null) {
+          const b = BUILDINGS.find((x) => x.id === m.id)
+          camera.rotation.set(0, (b?.rotation ?? 0) + Math.PI, 0)
+        } else {
+          // face back down the hallway toward its middle
+          camera.rotation.set(0, frame.pos[2] > 0 ? 0 : Math.PI, 0)
+        }
         nearbyRef.current = null
         doorRef.current = null
         setNearby(null)
