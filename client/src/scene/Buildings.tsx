@@ -454,6 +454,126 @@ export function Terminal({
   )
 }
 
+/**
+ * The town school: a long, low, brick-coloured two-storey block with a
+ * pitched-roof entrance bay in the middle, rows of classroom windows, and a
+ * flagpole out front. Wide footprint — one classroom per grade inside.
+ */
+export function School({
+  position,
+  rotation = 0,
+  width = 42,
+  depth = 16,
+  height = 9,
+  color = '#c96f4a',
+  roofColor = '#6f4a33',
+  trimColor = '#e8dcc4',
+}: BuildingProps & {
+  width?: number
+  depth?: number
+  height?: number
+  color?: string
+  roofColor?: string
+  trimColor?: string
+}) {
+  const halfW = width / 2
+  const frontZ = depth / 2
+  const cols = Math.floor((width - 10) / 3)
+  const winXs = Array.from({ length: cols }, (_, i) => (i - (cols - 1) / 2) * 3).filter(
+    (x) => Math.abs(x) > 3.2, // leave a gap for the entrance bay
+  )
+  return (
+    <group position={position} rotation-y={rotation}>
+      {/* main block */}
+      <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        <meshStandardMaterial
+          color={color}
+          bumpMap={grainTexture(8, 6)}
+          bumpScale={GRAIN_BUMP}
+          onBeforeCompile={wallWeathering}
+        />
+      </mesh>
+      {/* flat roof lip */}
+      <mesh position={[0, height + 0.2, 0]} castShadow>
+        <boxGeometry args={[width + 0.6, 0.4, depth + 0.6]} />
+        <meshStandardMaterial color={roofColor} onBeforeCompile={roofWeathering} />
+      </mesh>
+      {/* string course between floors */}
+      <mesh position={[0, height / 2, frontZ + 0.03]}>
+        <boxGeometry args={[width, 0.35, 0.1]} />
+        <meshStandardMaterial color={trimColor} />
+      </mesh>
+
+      {/* entrance bay: taller, with a gabled roof */}
+      <mesh position={[0, height / 2 + 0.6, frontZ - 0.5]} castShadow receiveShadow>
+        <boxGeometry args={[9, height + 1.2, 3]} />
+        <meshStandardMaterial color={trimColor} bumpMap={grainTexture(6)} bumpScale={GRAIN_BUMP} onBeforeCompile={wallWeathering} />
+      </mesh>
+      {[1, -1].map((s) => {
+        const span = 2.2
+        const rise = 2.4
+        const slant = Math.hypot(rise, span)
+        const angle = Math.atan2(rise, span)
+        return (
+          <mesh key={s} position={[0, height + 1.9 + rise / 2, frontZ - 0.5 + (s * span) / 2]} rotation-x={s * angle} castShadow>
+            <boxGeometry args={[10, 0.16, slant]} />
+            <meshStandardMaterial color={roofColor} flatShading onBeforeCompile={roofWeathering} />
+          </mesh>
+        )
+      })}
+      {/* clock disc on the gable */}
+      <mesh position={[0, height + 1.6, frontZ + 1.05]} rotation-x={Math.PI / 2}>
+        <cylinderGeometry args={[0.9, 0.9, 0.12, 20]} />
+        <meshStandardMaterial color="#f4efe2" emissive="#e8d68c" emissiveIntensity={0.2} />
+      </mesh>
+
+      {/* double doors */}
+      {[-0.75, 0.75].map((x) => (
+        <mesh key={x} position={[x, 1.5, frontZ + 1.05]}>
+          <boxGeometry args={[1.4, 3, 0.1]} />
+          <meshStandardMaterial color="#3a2e22" />
+        </mesh>
+      ))}
+      {/* stone steps */}
+      {[0, 1, 2].map((i) => (
+        <mesh key={i} position={[0, 0.15 + i * 0.001, frontZ + 1.7 + i * 0.5]} receiveShadow>
+          <boxGeometry args={[6 - i * 1.2, 0.3 - i * 0.06, 1.6 - i * 0.5]} />
+          <meshStandardMaterial color="#b9b1a0" />
+        </mesh>
+      ))}
+
+      {/* classroom windows, two rows, front and back */}
+      {winXs.map((x) =>
+        [2.6, 6.1].map((y) => (
+          <group key={`${x}-${y}`}>
+            <mesh position={[x, y, frontZ + 0.03]}>
+              <boxGeometry args={[1.8, 1.8, 0.06]} />
+              <meshStandardMaterial color="#bfe0d8" emissive="#a8d0c8" emissiveIntensity={0.28} />
+            </mesh>
+            <mesh position={[x, y, -frontZ - 0.03]}>
+              <boxGeometry args={[1.8, 1.8, 0.06]} />
+              <meshStandardMaterial color="#bfe0d8" emissive="#a8d0c8" emissiveIntensity={0.28} />
+            </mesh>
+          </group>
+        )),
+      )}
+
+      {/* flagpole out front */}
+      <group position={[-halfW + 3, 0, frontZ + 4]}>
+        <mesh position={[0, 4, 0]} castShadow>
+          <cylinderGeometry args={[0.08, 0.08, 8, 8]} />
+          <meshStandardMaterial color="#d8d8d8" />
+        </mesh>
+        <mesh position={[0.7, 7.2, 0]}>
+          <boxGeometry args={[1.4, 0.9, 0.05]} />
+          <meshStandardMaterial color="#c23b3b" />
+        </mesh>
+      </group>
+    </group>
+  )
+}
+
 export function OfficeBuilding({
   position,
   rotation = 0,

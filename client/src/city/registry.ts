@@ -3,7 +3,7 @@
 // To edit a building, find it here by address; its interior map lives in
 // interiors.ts under the same id.
 
-export type BuildingKind = 'house' | 'restaurant' | 'gasstation' | 'shop' | 'office' | 'airport'
+export type BuildingKind = 'house' | 'restaurant' | 'gasstation' | 'shop' | 'office' | 'airport' | 'school'
 
 export type RoofStyle = 'pyramid' | 'gabled' | 'flat' | 'shed'
 
@@ -17,6 +17,8 @@ export interface BuildingEntry {
   rotation: number // radians around Y; buildings face +z in local space
   colors?: { body?: string; roof?: string; awning?: string; accent?: string }
   size?: { width?: number; depth?: number; height?: number }
+  // if set, the door opens this URL (a separate website) instead of a 3D interior
+  link?: string
   // house-only: roof shape and small attached details
   roofStyle?: RoofStyle
   features?: { porch?: boolean; dormer?: boolean; garage?: boolean; secondChimney?: boolean }
@@ -65,6 +67,10 @@ export const BUILDINGS: BuildingEntry[] = [
   { id: 'maple-305', kind: 'shop', name: 'Green Grocer', number: 305, street: 'Maple Avenue', position: [-10, 0, 45], rotation: Math.PI, colors: { body: '#6fa34a', awning: '#2e4a1e' } },
   { id: 'maple-311', kind: 'shop', name: 'Red Rocket Records', number: 311, street: 'Maple Avenue', position: [13, 0, 45], rotation: Math.PI, colors: { body: '#c23b3b', awning: '#3a1414' } },
   { id: 'maple-315', kind: 'shop', name: 'Blue Harbor Books', number: 315, street: 'Maple Avenue', position: [23, 0, 45], rotation: Math.PI, colors: { body: '#3a6ea5', awning: '#22344a' } },
+  // ---------- south of Maple Avenue: the school grounds ----------
+  // big K–12 school on the south edge of town, one classroom per grade.
+  // its door links out to a separate website (client/public/school/).
+  { id: 'central-1', kind: 'school', name: 'Simtown Public School', number: 1, street: 'Central Boulevard', position: [0, 0, 64], rotation: Math.PI, colors: { body: '#c96f4a', roof: '#6f4a33', accent: '#e8dcc4' }, size: { width: 42, depth: 16, height: 9 }, link: '/school/index.html' },
 ]
 
 export function addressOf(b: BuildingEntry): string {
@@ -86,6 +92,7 @@ function doorLocal(b: BuildingEntry): [number, number] {
       return [0, 4.05]
     case 'office':
     case 'airport':
+    case 'school':
       return [0, (b.size?.depth ?? 10) / 2]
     case 'gasstation':
       // the convenience shop's door, at the back of the pad

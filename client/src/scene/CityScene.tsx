@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { BUILDINGS, STREETS, doorWorld, type BuildingEntry } from '../city/registry'
 import Airport from './Airport'
-import { GasStation, House, OfficeBuilding, Restaurant, Shop, Terminal } from './Buildings'
+import { GasStation, House, OfficeBuilding, Restaurant, School, Shop, Terminal } from './Buildings'
 import Flights from './Flights'
 import { EzTree, TREE_PRESETS } from './EzTree'
 import { createGroundMaterial } from './groundMaterial'
@@ -91,6 +91,19 @@ function Building({ b }: { b: BuildingEntry }) {
           color={b.colors?.body}
         />
       )
+    case 'school':
+      return (
+        <School
+          position={b.position}
+          rotation={b.rotation}
+          width={b.size?.width}
+          depth={b.size?.depth}
+          height={b.size?.height}
+          color={b.colors?.body}
+          roofColor={b.colors?.roof}
+          trimColor={b.colors?.accent}
+        />
+      )
     case 'airport':
       return (
         <Terminal
@@ -114,6 +127,7 @@ const PLATE_Y: Record<BuildingEntry['kind'], number> = {
   shop: 2.7,
   office: 3.2,
   airport: 3.4,
+  school: 3.4,
 }
 
 export default function CityScene() {

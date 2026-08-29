@@ -143,6 +143,12 @@ export default function InteractionSystem({
       if (!nearby?.canAct) return
 
       if (m.view === 'city' && nearby.action === 'enter') {
+        // some addresses are their own website — open it and stay put in town
+        const linked = BUILDINGS.find((x) => x.id === nearby.id)?.link
+        if (linked) {
+          window.open(linked, '_blank', 'noopener')
+          return
+        }
         const returnPos: [number, number, number] = [
           camera.position.x,
           camera.position.y,
